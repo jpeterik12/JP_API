@@ -158,6 +158,7 @@ do
     LISTENER = mke()
     LISTENER.listeners = {}
     LISTENER.listeners["shot"] = {}
+    LISTENER.listeners["special"] = {}
     LISTENER.listeners["upd"] = {}
     LISTENER.listeners["dr"] = {}
     LISTENER.listeners["bullet_init"] = {}
@@ -193,6 +194,15 @@ do
             end
           end
         end
+        if ent.right_clic and not ent.old_right_clic then
+          ent.old_right_clic = ent.right_clic
+          ent.right_clic = function()
+            ent.old_right_clic()
+            for listener in all(LISTENER.listeners["special"]) do
+              listener()
+            end
+          end
+        end
       end
     end
 
@@ -217,8 +227,8 @@ do
 
     function LISTENER:dr()
       if not LISTENER.run then return end
-      lprint("JP_API 1.0", 248, 162.5, 2)
-      lprint(MODNAME, 1, 162.5, 2)
+      lprint("JP_API 1.1", 248, 162.5, 2)
+      lprint(MODNAME, 5, 162.5, 2)
       for listener in all(LISTENER.listeners["dr"]) do
         listener()
       end

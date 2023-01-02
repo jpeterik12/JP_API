@@ -42,6 +42,7 @@
 # Events
 - Contents:
   - [`shot`](#shot)
+  - [`special`](#special)
   - [`bullet_init`](#bullet_init)
   - [`bullet_upd`](#bullet_upd)
   - [`after_white`](#after_white)
@@ -54,6 +55,8 @@
 
 #### `shot`
 - Event fires after the player shoots. All bullets exist, and have not moved.
+#### `special`
+- Event fires after the player uses a special. Objects exist (grenades) or other effects are set.
 #### `bullet_init`
 - Event fires for each bullet when it is spawned. Has the bullet passed in as a paramater.
 #### `bullet_upd`
