@@ -1,4 +1,4 @@
-id = "example"
+id = "examplethrone"
 setup = {
   slots_max = { 10, 10 },
 }
@@ -266,8 +266,8 @@ do
   end
 
   function get_weapons_list()
-    local a = { 0 }
-    for i = 1, #weapons do
+    local a = {}
+    for i = 0, #weapons do
       add(a, i)
     end
     enable_description()
