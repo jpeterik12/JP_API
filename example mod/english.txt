@@ -1,0 +1,6 @@
+
+-- MENU
+example::example
+example_desc::copy of throne but with JP API embedded
+credits::modder: JP_12
+
