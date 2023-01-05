@@ -18,8 +18,11 @@ As a note, doing this will require knowledge in both lua and SGK's base function
 ## Usage
 Custom Code should be written in the section labeled `MOD CODE`, as distinct modules that are a single function. Then add that function to the `mod_setup` function.
 
+## Updating
+To update the API, simply copy the `JP_API CODE` section from the latest version into your mode's lua file.
+
 ## Example
-Here is an example that simply logs each time an event occurs
+Here is an example that simply logs each time some event occurs
 ```lua
 ...
 -- MOD CODE
@@ -38,10 +41,6 @@ do
       _log("BULLET SPAWNED")
     end)
     
-    add_listener("bullet_upd", function(bullet) 
-      _log("BULLET UPDATING")
-    end)
-    
     add_listener("after_black", function() 
       _log("BLACK MOVE")
     end)
@@ -49,20 +48,15 @@ do
     add_listener("after_white", function() 
       _log("WHITE MOVE")
     end)
-
-    add_listener("upd", function() 
-      _log("GENERIC UPDATE")
-    end)
-
-    add_listener("dr", function() 
-      _log("GENERIC DRAW")
-    end)
   end
 end
 -- MOD CODE END
 ...
 ```
+For a more complete example, check out the [example mods](/examples/).
 
 Check out **[the docs](/doc/api.md)** for a much more complete explaination!
+
+If you have any questions, feel free to ask in the [Discord](https://discord.gg/dpQx647USm), or message me directily (JP12#1148)
 
 Have fun!

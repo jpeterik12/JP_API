@@ -1,61 +1,35 @@
-id = "examplethrone"
+id = "aura"
 setup = {
   slots_max = { 10, 10 },
 }
 weapons = {
-  { gid = 0, name = "Example 0", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 0" },
-  { gid = 1, name = "Example 1", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 1" },
-  { gid = 2, name = "Example 2", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 2" },
-  { gid = 3, name = "Example 3", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 3" },
-  { gid = 4, name = "Example 4", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 4" },
-  { gid = 5, name = "Example 5", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 5" },
-  { gid = 6, name = "Example 6", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 6" },
-  { gid = 7, name = "Example 7", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 7" },
-  { gid = 8, name = "Example 8", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 8" },
-  { gid = 9, name = "Example 9", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 9" },
-  { gid = 10, name = "Example 10", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 10" },
-  { gid = 11, name = "Example 11", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 11" },
-  { gid = 12, name = "Example 12", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 12" },
-  { gid = 13, name = "Example 13", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 13" },
-  { gid = 14, name = "Example 14", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 14" },
-  { gid = 15, name = "Example 15", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 15" },
+  { gid = 0, name = "Solomon", chamber_max = 2, firepower = 4, firerange = 3, spread = 55, ammo_max = 6, }, --4
+  { gid = 1, name = "Victoria", chamber_max = 1, firepower = 5, firerange = 4, spread = 45, ammo_max = 3, },
+  { gid = 2, name = "Ramesses II", chamber_max = 2, firepower = 4, firerange = 3, spread = 65, ammo_max = 5,
+    knockback = 50, },
+  { gid = 3, name = "Richard III", chamber_max = 3, firepower = 3, firerange = 3, spread = 75, ammo_max = 8 },
+  { gid = 4, name = "Makeda", chamber_max = 2, firepower = 3, firerange = 3, spread = 50, ammo_max = 6, blade = 2 }
 }
 ranks = {
   { nothing = 1 },
   { gain = { 0, 0 } },
-  { gain = { 3 } },
-  { king_hp = 1 },
   { gain = { 1 } },
-  { spread = 10 },
   { king_hp = 1 },
+  { spread = 10 },
+  { ammo_max = -1 },
   { gain = { 2 } },
+  { king_hp = 1 },
   { rook_hp = 1 },
-  { knight_hp = 1 },
   { boss_hprc = 200 },
+  { gain = { 3 }, delay = 10 },
+  { knight_hp = 1 },
   { spread = 15 },
   { rook_hp = 1 },
-  { ammo_max = -1 },
   { all_hp = 1, ammo_max = 2 },
 }
 base = {
-  promotion = 1, surrender = 1,
-  gain = { 0, 0, 0, 1, 5, 2, 0 },
+  promotion = 1, surrender = 1, aura = 2,
+  gain = { 3, 0, 0, 0, 1, 5, 2, 0 },
 
 }
 MODNAME = current_mod
@@ -127,7 +101,7 @@ do
     local function search_recurse(p, v, d, path)
       if type(p) == type({}) then
         for k, v2 in pairs(p) do
-          if v2 == v then
+          if v2 == v and type(v2) == type(v) then
             if (type(k) == type("")) or (type(k) == type(1)) then
               _log(path .. "." .. k)
             else
@@ -409,6 +383,90 @@ end
 do
   function mod_setup()
     init_listeners()
+    enable_aura()
+    add_listener("dr", function()
+      lprint(lang.credits, 181, 158, 6)
+    end)
+  end
+
+  function enable_aura()
+    add_listener("after_white", function()
+      --[[
+		    Relavant Card Effects:
+
+		    aura = <int>			  	Activates the Aura. The Aura covers a square of width <int>
+		    auradmg = <num>				Increases damage of the aura by <num>
+		    auracd = <int>   			Increases the number of turns between two auras by <int>
+		    <piece>_auraim = 1		<piece> can't be hurt by the aura anymore
+	    --]]
+
+      if stack.aura then
+
+        -- gameplay setup
+        local def_dmg = 1 -- default damage of the aura
+        local def_cd = 1 -- default time interval between auras
+        local immune = { -- pieces that can't be hurt by the aura
+          -- pawn = false,
+          -- knight = false,
+          -- bishop = false,
+          -- rook = false,
+          -- queen = false,
+          -- king = false,
+          -- boss = false,
+          -- canonball = false
+        }
+        local leader_immune = false -- whether the current leader can be hurt by the aura
+
+        -- display setup
+        local aura_tempo = 12 -- number of frames it takes for the aura to expand to maximum
+        local aura_colour = 5 -- colour of the aura
+        local enable_sfx = true -- enables sfx for the aura
+
+        if stack.auradmg then def_dmg = def_dmg + stack.auradmg end
+        if stack.auracd then def_cd = def_cd + stack.auracd end
+
+        if mode.turns and mode.turns % def_cd == 0 then
+          for i = -stack.aura, stack.aura do
+            for j = -stack.aura, stack.aura do
+              if not (i == 0 and j == 0) and gsq(hero.sq.px + i, hero.sq.py + j) and
+                  gsq(hero.sq.px + i, hero.sq.py + j).p then
+                local p = gsq(hero.sq.px + i, hero.sq.py + j).p
+                if not immune[p.name] and not (p.leader and leader_immune) and not p.aruaim then
+                  hit(p, def_dmg, hero) -- code by Glacies
+                end
+              end
+            end
+          end
+          if enable_sfx then sfx("lift") end
+          local marker1 = mke()
+          local marker2 = mke()
+
+          marker1.sx = hero.x
+          marker1.sy = hero.y
+          marker1.ex = hero.x - stack.aura * 16
+          marker1.ey = hero.y - stack.aura * 16
+          marker1.tws = aura_tempo
+          marker1.twc = 0
+          function marker1.twf()
+            del(ents, marker1)
+          end
+
+          function marker1:dr()
+            rect(marker1.x, marker1.y, marker2.x, marker2.y, aura_colour)
+          end
+
+          marker2.sx = hero.x + 15
+          marker2.sy = hero.y + 15
+          marker2.ex = hero.x + 15 + stack.aura * 16
+          marker2.ey = hero.y + 15 + stack.aura * 16
+          marker2.tws = aura_tempo
+          marker2.twc = 0
+          function marker2.twf()
+            del(ents, marker2)
+          end
+        end
+      end
+    end)
   end
 end
 -- MOD CODE END

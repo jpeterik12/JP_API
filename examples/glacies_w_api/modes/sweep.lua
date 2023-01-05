@@ -1,61 +1,35 @@
-id = "examplethrone"
+id = "sweep"
 setup = {
   slots_max = { 10, 10 },
 }
 weapons = {
-  { gid = 0, name = "Example 0", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 0" },
-  { gid = 1, name = "Example 1", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 1" },
-  { gid = 2, name = "Example 2", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 2" },
-  { gid = 3, name = "Example 3", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 3" },
-  { gid = 4, name = "Example 4", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 4" },
-  { gid = 5, name = "Example 5", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 5" },
-  { gid = 6, name = "Example 6", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 6" },
-  { gid = 7, name = "Example 7", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 7" },
-  { gid = 8, name = "Example 8", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 8" },
-  { gid = 9, name = "Example 9", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 9" },
-  { gid = 10, name = "Example 10", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 10" },
-  { gid = 11, name = "Example 11", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 11" },
-  { gid = 12, name = "Example 12", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 12" },
-  { gid = 13, name = "Example 13", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 13" },
-  { gid = 14, name = "Example 14", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 14" },
-  { gid = 15, name = "Example 15", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 15" },
+  { gid = 0, name = "Solomon", chamber_max = 2, firepower = 4, firerange = 3, spread = 55, ammo_max = 6, }, --4
+  { gid = 1, name = "Victoria", chamber_max = 1, firepower = 5, firerange = 4, spread = 45, ammo_max = 3, },
+  { gid = 2, name = "Ramesses II", chamber_max = 2, firepower = 4, firerange = 3, spread = 65, ammo_max = 5,
+    knockback = 50, },
+  { gid = 3, name = "Richard III", chamber_max = 3, firepower = 3, firerange = 3, spread = 75, ammo_max = 8 },
+  { gid = 4, name = "Makeda", chamber_max = 2, firepower = 3, firerange = 3, spread = 50, ammo_max = 6, blade = 2 }
 }
 ranks = {
   { nothing = 1 },
   { gain = { 0, 0 } },
-  { gain = { 3 } },
-  { king_hp = 1 },
   { gain = { 1 } },
-  { spread = 10 },
   { king_hp = 1 },
+  { spread = 10 },
+  { ammo_max = -1 },
   { gain = { 2 } },
+  { king_hp = 1 },
   { rook_hp = 1 },
-  { knight_hp = 1 },
   { boss_hprc = 200 },
+  { gain = { 3 }, delay = 10 },
+  { knight_hp = 1 },
   { spread = 15 },
   { rook_hp = 1 },
-  { ammo_max = -1 },
   { all_hp = 1, ammo_max = 2 },
 }
 base = {
-  promotion = 1, surrender = 1,
-  gain = { 0, 0, 0, 1, 5, 2, 0 },
+  promotion = 1, surrender = 1, sweep = 1, blade = 10,
+  gain = { 3, 0, 0, 0, 1, 5, 2, 0 },
 
 }
 MODNAME = current_mod
@@ -127,7 +101,7 @@ do
     local function search_recurse(p, v, d, path)
       if type(p) == type({}) then
         for k, v2 in pairs(p) do
-          if v2 == v then
+          if v2 == v and type(v2) == type(v) then
             if (type(k) == type("")) or (type(k) == type(1)) then
               _log(path .. "." .. k)
             else
@@ -409,6 +383,60 @@ end
 do
   function mod_setup()
     init_listeners()
+    enable_sweep()
+    add_listener("dr", function()
+      lprint(lang.credits, 181, 158, 6)
+    end)
+  end
+
+  function enable_sweep()
+    --[[
+		  Relavant Card Effects:
+
+		  sweep=<int>			When set to 1: Sweep attack 2 adjacent squares
+		  					      When set to higher values: Sweep attack 2 more squares
+		  sweepdmg = <num>	Increases the sweep damage by <num>
+	  --]]
+    add_listener("blade", function()
+      if not stack.sweep or not stack.blade then return end
+      local bladed_square = get_square_at(mx, my)
+      local to_sweep = { bladed_square }
+      local function in_range(sq)
+        if not sq then return false end
+        for sq2 in all(to_sweep) do
+          if sq == sq2 then return false end
+        end
+        if abs(sq.px - bladed_square.px) <= 1 and abs(sq.py - bladed_square.py) <= 1 then
+          if abs(sq.px - hero.sq.px) <= 1 and abs(sq.py - hero.sq.py) <= 1 then
+            return true
+          end
+          return false
+        end
+      end
+
+      for i = 1, min(3, stack.sweep) do
+        local to_add = {}
+        for sq in all(to_sweep) do
+          local north = gsq(sq.px, sq.py - 1)
+          local east = gsq(sq.px + 1, sq.py)
+          local south = gsq(sq.px, sq.py + 1)
+          local west = gsq(sq.px - 1, sq.py)
+          if in_range(north) then add(to_add, north) end
+          if in_range(east) then add(to_add, east) end
+          if in_range(south) then add(to_add, south) end
+          if in_range(west) then add(to_add, west) end
+        end
+        for sq in all(to_add) do
+          add(to_sweep, sq)
+        end
+      end
+      for sq in all(to_sweep) do
+        if sq.p and sq.p.hp then
+          if not stack.sweepdmg then stack.sweepdmg = 0 end
+          hit(sq.p, stack.sweepdmg + flr(stack.blade / 2))
+        end
+      end
+    end)
   end
 end
 -- MOD CODE END

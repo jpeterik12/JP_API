@@ -1,61 +1,35 @@
-id = "examplethrone"
+id = "hook"
 setup = {
   slots_max = { 10, 10 },
 }
 weapons = {
-  { gid = 0, name = "Example 0", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 0" },
-  { gid = 1, name = "Example 1", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 1" },
-  { gid = 2, name = "Example 2", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 2" },
-  { gid = 3, name = "Example 3", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 3" },
-  { gid = 4, name = "Example 4", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 4" },
-  { gid = 5, name = "Example 5", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 5" },
-  { gid = 6, name = "Example 6", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 6" },
-  { gid = 7, name = "Example 7", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 7" },
-  { gid = 8, name = "Example 8", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 8" },
-  { gid = 9, name = "Example 9", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 9" },
-  { gid = 10, name = "Example 10", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 10" },
-  { gid = 11, name = "Example 11", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 11" },
-  { gid = 12, name = "Example 12", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 12" },
-  { gid = 13, name = "Example 13", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 13" },
-  { gid = 14, name = "Example 14", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 14" },
-  { gid = 15, name = "Example 15", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
-    desc = "Description 15" },
+  { gid = 0, name = "Solomon", chamber_max = 2, firepower = 4, firerange = 3, spread = 55, ammo_max = 6, }, --4
+  { gid = 1, name = "Victoria", chamber_max = 1, firepower = 5, firerange = 4, spread = 45, ammo_max = 3, },
+  { gid = 2, name = "Ramesses II", chamber_max = 2, firepower = 4, firerange = 3, spread = 65, ammo_max = 5,
+    knockback = 50, },
+  { gid = 3, name = "Richard III", chamber_max = 3, firepower = 3, firerange = 3, spread = 75, ammo_max = 8 },
+  { gid = 4, name = "Makeda", chamber_max = 2, firepower = 3, firerange = 3, spread = 50, ammo_max = 6, blade = 2 }
 }
 ranks = {
   { nothing = 1 },
   { gain = { 0, 0 } },
-  { gain = { 3 } },
-  { king_hp = 1 },
   { gain = { 1 } },
-  { spread = 10 },
   { king_hp = 1 },
+  { spread = 10 },
+  { ammo_max = -1 },
   { gain = { 2 } },
+  { king_hp = 1 },
   { rook_hp = 1 },
-  { knight_hp = 1 },
   { boss_hprc = 200 },
+  { gain = { 3 }, delay = 10 },
+  { knight_hp = 1 },
   { spread = 15 },
   { rook_hp = 1 },
-  { ammo_max = -1 },
   { all_hp = 1, ammo_max = 2 },
 }
 base = {
-  promotion = 1, surrender = 1,
-  gain = { 0, 0, 0, 1, 5, 2, 0 },
+  promotion = 1, surrender = 1, special = "hook",
+  gain = { 3, 0, 0, 0, 1, 5, 2, 0 },
 
 }
 MODNAME = current_mod
@@ -127,7 +101,7 @@ do
     local function search_recurse(p, v, d, path)
       if type(p) == type({}) then
         for k, v2 in pairs(p) do
-          if v2 == v then
+          if v2 == v and type(v2) == type(v) then
             if (type(k) == type("")) or (type(k) == type(1)) then
               _log(path .. "." .. k)
             else
@@ -409,6 +383,111 @@ end
 do
   function mod_setup()
     init_listeners()
+    enable_hook()
+    add_listener("dr", function()
+      lprint(lang.credits, 181, 158, 6)
+    end)
+  end
+
+  function enable_hook()
+    --[[
+		  Relavant Card Effects:
+
+		  special = "hook"			Activates the Hook
+	  	hookdmg = <num>				Increases damage of the hook by <num>
+	  	<piece>_hkim = 1			<piece> can't be pulled or stunned anymore
+	  --]]
+    new_special("hook", function()
+      local def_dmg = 1 -- default damage of the hook
+      local immune = { -- pieces that don't get pulled or stunned
+        -- pawn = false,
+        -- knight = false,
+        -- bishop = false,
+        -- rook = false,
+        -- queen = false,
+        king = true,
+        boss = true,
+        -- canonball = false
+      }
+      local leader_immune = false -- whether the current leader can be pulled or stunned
+
+      -- display setup
+      local hook_speed = 9 -- animation speed of the hook (unit: pixels per frame)
+      local rope_time = 20 -- duration for which the rope can exist before hitting a piece (unit: frame)
+      local rope_colour = 5 -- colour of the rope
+      local piece_tempo = 12 -- number of frames it takes for the piece to get pulled back
+      local enable_sfx = true -- enables sfx for throwing the hook
+
+      local hook = mke()
+      if enable_sfx then sfx("grab_done") end
+      hook.x = hero.x + 8 + 8 * cos(hero.current_an)
+      hook.y = hero.y + 8 + 8 * sin(hero.current_an)
+      hook.vx = hook_speed * cos(hero.current_an)
+      hook.vy = hook_speed * sin(hero.current_an)
+      hook.start_x = hero.x + 8 + 8 * cos(hero.current_an)
+      hook.start_y = hero.y + 8 + 8 * sin(hero.current_an)
+      hook.life = rope_time
+      function hook:upd()
+        local hook_sq = get_square_at(hook.x, hook.y)
+        if hook_sq and hook.stop == nil then
+          if hook_sq.p then
+            local p = hook_sq.p
+            hit(p, def_dmg) -- code by Glacies
+            if p.dead or immune[p.name] or p.hkim or (p.leader and leader_immune) then
+              del(ents, hook)
+              hook:nxt()
+            else
+              p.stun = true
+              hook.vx = 0
+              hook.vy = 0
+              hook.stop = true
+              hook.life = nil
+              wait(15, function()
+                if hook.sq then
+                  p.sq.p = nil
+                  hook.sq.p = p
+                  p.sq = hook.sq
+                  p.sx = p.x
+                  p.sy = p.y
+                  p.ex = hook.sq.x
+                  p.ey = hook.sq.y
+                  p.tws = piece_tempo
+                  p.twc = 0
+                  if p.type == 0 and hook.sq.py == 7 then
+                    add_event(ev_promote, p)
+                  end
+                  hook.sx = hook.x
+                  hook.sy = hook.y
+                  hook.ex = hook.start_x
+                  hook.ey = hook.start_y
+                  hook.tws = piece_tempo
+                  hook.twc = 0
+                  function hook:twf()
+                    del(ents, hook)
+                    hook:nxt()
+                  end
+                else
+                  del(ents, hook)
+                  hook:nxt()
+                end
+              end)
+            end
+          elseif hook.sq == nil then
+            hook.sq = hook_sq
+          end
+        end
+      end
+
+      function hook:dr()
+        line(self.start_x, self.start_y, self.x, self.y, rope_colour)
+      end
+
+      function hook:nxt()
+        wait(15, opp_turn)
+      end
+
+      remove_buts()
+    end)
   end
 end
 -- MOD CODE END

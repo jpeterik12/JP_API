@@ -2,6 +2,7 @@
 - Contents:
   - [`add_listener()`](#add_listener-event-function)
   - [`remove_listener()`](#remove_listener-event-function)
+  - [`new_special()`](#new_special-name-function)
   - [`_logv()`](#_logv-to_log-title)
   - [`_logs()`](#_logs-to_search-value)
   
@@ -24,6 +25,14 @@
 
 &#8202;
 
+#### `new_special (name, function)`
+- Creates a new special with the name `name` and the function `function`.
+- To use in code, assign a card or weapon `special = "<name>"`
+- `name` must be a string.
+- `function` must be a function.
+
+&#8202;
+
 #### `_logv (to_log[, title])`
 - Verbosely logs `to_log` to the console. (depth of 4)
 - `title` must be a string
@@ -42,6 +51,8 @@
 # Events
 - Contents:
   - [`shot`](#shot)
+  - [`move`](#move)
+  - [`blade`](#blade)
   - [`special`](#special)
   - [`bullet_init`](#bullet_init)
   - [`bullet_upd`](#bullet_upd)
@@ -55,6 +66,10 @@
 
 #### `shot`
 - Event fires after the player shoots. All bullets exist, and have not moved.
+#### `move`
+- Event fires after the player moves. The player is still moving when called.
+#### `blade`
+- Event fires after the player uses their blade. The piece is already killed.
 #### `special`
 - Event fires after the player uses a special. Objects exist (grenades) or other effects are set.
 #### `bullet_init`

@@ -1,0 +1,13 @@
+
+-- MENU
+play::play!
+aura::aura
+aura_desc::this mode is a clone of throne mode with aura
+hook::hook
+hook_desc::this mode is a clone of throne mode with hook
+sweep::sweep
+sweep_desc::this mode is a clone of throne mode with sweep
+
+special_hook::hook
+credits::modder: Glacies
+
