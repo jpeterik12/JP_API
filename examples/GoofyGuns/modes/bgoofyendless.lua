@@ -13,9 +13,9 @@ weapons = {
 	{ gid = 1, name = "Perfect Barrels", chamber_max = 3, firepower = 4, firerange = 5, spread = 70, ammo_max = 5,
 		fixed_angle = 1, desc = "Bullets are spread evenly across fire arc. Less a shotgun and more 4 rifles taped together." },
 	{ gid = 2, name = "Deceleration Cannon", chamber_max = 2, firepower = 2, firerange = 10, spread = 50, ammo_max = 4,
-		weakening = 1, desc = "Bullets do more damage the longer they exist. Go for those snipes." },
+		weakening = 1, desc = "Bullets do less damage the longer they exist. Get in their face." },
 	{ gid = 3, name = "Acceleration Cannon", chamber_max = 1, firepower = 2, firerange = 10, spread = 50, ammo_max = 4,
-		strengthening = 1, desc = "Bullets do less damage the longer they exist. Get in their face." },
+		strengthening = 1, desc = "Bullets do more damage the longer they exist. Go for those snipes." },
 	{ gid = 4, name = "Single Use Shotgun", chamber_max = 1, firepower = 1, firerange = 10, spread = 0, ammo_max = 0,
 		one_shot = 1, desc = "No spare bullets. One shot, one kill. Get the angle, take the shot." },
 	{ gid = 5, name = "Long Shotgun", chamber_max = 2, firepower = 4, firerange = 4, spread = 50, ammo_max = 5,
@@ -176,7 +176,7 @@ do
 	-- SAFETY CODE
 	function enable_attacked()
 		local show_attacked = false
-		mk_text_but(200, 0, 32, "SAFE", function() show_attacked = not show_attacked end).ents[1].button = false
+		mk_text_but(220, 0, 20, "SAFE", function() show_attacked = not show_attacked end).ents[1].button = false
 		add_listener("dr", function(self)
 			if show_attacked and playing then
 				for sq in all(squares) do
