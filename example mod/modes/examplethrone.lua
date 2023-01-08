@@ -62,7 +62,7 @@ MODNAME = current_mod
 
 
 -- JP_API CODE
-do
+do -- VERSION 1.1
   -- LOGGING CODE
   function _logv(o, start_str)
     if not start_str then
