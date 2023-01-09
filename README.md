@@ -1,5 +1,6 @@
 # JP Shotgun King API
 A listener based API for use with *Shotgun King: The Final Checkmate* by PUNKCAKE Delicieux.
+This allows easier creation of mods, as well as adding a few nice to haves.
 
 
 **[Go to the documentation!](/doc/api.md)**

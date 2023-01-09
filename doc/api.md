@@ -1,11 +1,27 @@
 # API
 - Contents:
+  - [Gun Descriptions](#gun-descriptions)
+  - [Card Art Limit Removal](#card-art-limit-removal)
   - [`add_listener()`](#add_listener-event-function)
   - [`remove_listener()`](#remove_listener-event-function)
   - [`new_special()`](#new_special-name-function)
   - [`_logv()`](#_logv-to_log-title)
   - [`_logs()`](#_logs-to_search-value)
   
+&#8202;
+
+#### Gun Descriptions
+ - Add `desc = "<Description>"` to any weapon to add a description to it.
+ - The description will be displayed in the weapon select menu as a hoverable `?`.
+
+&#8202;
+
+#### Card Art Limit Removal
+ - JP_API removes the limit of 120 Cards (60 Black, 60 White).
+ - To mark a card above `gid` 119 to the black team, add `real_team = 0` to the card.
+  - Otherwise, cards above `gid` 119 will be marked as white.
+ - Thanks to Glacies for finding out how to set the team!
+
 &#8202;
 
 #### `add_listener (event, function)`

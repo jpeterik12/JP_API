@@ -62,7 +62,7 @@ MODNAME = current_mod
 
 
 -- JP_API CODE
-do -- VERSION 1.1
+do -- VERSION 1.2
   -- LOGGING CODE
   function _logv(o, start_str)
     if not start_str then
@@ -170,7 +170,36 @@ do -- VERSION 1.1
     LISTENER.listeners["bullet_upd"] = {}
     LISTENER.listeners["after_black"] = {}
     LISTENER.listeners["after_white"] = {}
-    local function click_tracker()
+    local function card_fixing()
+      function fix_card(tfcard)
+        tfcard.dr = function(self)
+          if self.flip_co then
+            if self.flip_co > 0.5 then
+              dr_flip_card(self.x, self.y, 59 + self.team, self.flip_co)
+            else
+              dr_flip_card(self.x, self.y, self.gid, self.flip_co)
+            end
+          else
+            dr_flip_card(self.x, self.y, self.gid, 0)
+          end
+        end
+      end
+
+      for ent in all(ents) do
+        if ent.gid and ent.gid >= 120 and not ent.card_counter then
+          fix_card(ent)
+        end
+        if ent.cards then
+          for sub_ent in all(ent.cards) do
+            if sub_ent.gid and sub_ent.gid >= 120 and not sub_ent.card_counter then
+              fix_card(sub_ent)
+            end
+          end
+        end
+      end
+    end
+
+    local function click_tracking()
       local function shoot_tracker(ent)
         ent.old_left_clic = ent.left_clic
         ent.left_clic = function()
@@ -312,7 +341,8 @@ do -- VERSION 1.1
     LISTENER.jumping = false
     function LISTENER:upd()
       if not LISTENER.run then return end
-      click_tracker()
+      click_tracking()
+      card_fixing()
       for listener in all(LISTENER.listeners["upd"]) do
         listener()
       end
@@ -335,7 +365,7 @@ do -- VERSION 1.1
 
     function LISTENER:dr()
       if not LISTENER.run then return end
-      lprint("JP_API 1.1", 250, 162.5, 2)
+      lprint("JP_API 1.2", 250, 162.5, 2)
       lprint(MODNAME, 5, 162.5, 2)
       for listener in all(LISTENER.listeners["dr"]) do
         listener()
@@ -366,15 +396,24 @@ do -- VERSION 1.1
     end
   end
 
-  -- GUN DESCRIPTIONS
   function initialize()
-    load_mod("none")
+    load_mod("none") -- FIX GLITCHED ART
     load_mod(MODNAME)
-    if mode.ranks then mode.ranks_index = mid(0, bget(0, 4), #ranks - 1) end
-    if mode.weapons then mode.weapons_index = mid(0, bget(1, 4), #weapons - 1) end
-    palette("mods\\" .. MODNAME .. "\\gfx.png")
+
+    if mode.ranks then mode.ranks_index = mid(0, bget(0, 4), #ranks - 1) end -- FIX RANK CRASH
+    if mode.weapons then mode.weapons_index = mid(0, bget(1, 4), #weapons - 1) end -- FIX WEAPONS CRASH
+
+    palette("mods\\" .. MODNAME .. "\\gfx.png") -- USE CUSTOM PALLETE
+
+    for cahd in all(CARDS) do -- FIX ART LIMIT (Thanks Glacies)
+      if cahd.real_team == 0 or cahd.real_team == 1 then
+        cahd.team = cahd.real_team
+      end
+    end
   end
 
+  -- GUN DESCRIPTIONS
+  desc_start = true
   function enable_description()
     local x = {}
     if weapons[mode.weapons_index + 1].desc then
@@ -383,17 +422,33 @@ do -- VERSION 1.1
       x = mke()
     end
     x.lastindex = mode.weapons_index
-    x.dr = function(self)
-      if weapons[mode.weapons_index + 1].desc then
-        lprint("?", 284, 67, 5)
-      end
-      if (mode.weapons_index ~= self.lastindex) then
-        del(ents, self)
-        enable_description()
+    if (desc_start) then
+      desc_start = false
+      wait(30, function()
+        x.dr = function(self)
+          if weapons[mode.weapons_index + 1].desc then
+            lprint("?", 284, 67, 5)
+          end
+          if (mode.weapons_index ~= self.lastindex) then
+            del(ents, self)
+            enable_description()
+          end
+        end
+      end)
+    else
+      x.dr = function(self)
+        if weapons[mode.weapons_index + 1].desc then
+          lprint("?", 284, 67, 5)
+        end
+        if (mode.weapons_index ~= self.lastindex) then
+          del(ents, self)
+          enable_description()
+        end
       end
     end
   end
 
+  -- NEEDED FOR GUN DESCRIPTIONS
   function get_weapons_list()
     local a = {}
     for i = 0, #weapons do
