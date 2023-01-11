@@ -62,7 +62,7 @@ MODNAME = current_mod
 
 
 -- JP_API CODE
-do -- VERSION 1.2
+do -- VERSION 1.3
   -- LOGGING CODE
   function _logv(o, start_str)
     if not start_str then
@@ -365,10 +365,50 @@ do -- VERSION 1.2
 
     function LISTENER:dr()
       if not LISTENER.run then return end
-      lprint("JP_API 1.2", 250, 162.5, 2)
+      lprint("JP_API 1.3", 250, 162.5, 2)
       lprint(MODNAME, 5, 162.5, 2)
       for listener in all(LISTENER.listeners["dr"]) do
         listener()
+      end
+    end
+
+    old_new_turn = on_new_turn
+    on_new_trun = function()
+      if old_new_turn then
+        old_new_turn()
+      end
+      for listener in all(LISTENER.listeners["after_white"]) do
+        listener()
+      end
+    end
+
+
+    do -- BAN CARDS (Glacies)
+      if not mode.ban then mode.ban = {} end
+      if mode.weapons and mode.weapons[mode.weapons_index + 1].ban then
+        for ca in all(mode.weapons[mode.weapons_index + 1].ban) do
+          add(mode.ban, ca)
+        end -- code by Glacies
+      end
+      if mode.ranks and mode.ranks[mode.ranks_index + 1].ban then
+        for ca in all(mode.ranks[mode.ranks_index + 1].ban) do
+          add(mode.ban, ca)
+        end
+      end
+    end
+    do -- FIX EXHAUST (Glacies)
+      old_grow = grow
+      grow = function()
+        old_grow()
+        for ent in all(ents) do
+          if ent.cards then
+            for ca in all(ent.cards) do
+              if ca.flipped then
+                ca.flipped = false
+              end
+            end
+          end
+        end
       end
     end
   end
@@ -388,12 +428,6 @@ do -- VERSION 1.2
 
   function new_special(name, special)
     LISTENER.specials[name] = special
-  end
-
-  function on_new_turn()
-    for listener in all(LISTENER.listeners["after_white"]) do
-      listener()
-    end
   end
 
   function initialize()

@@ -2,6 +2,8 @@
 - Contents:
   - [Gun Descriptions](#gun-descriptions)
   - [Card Art Limit Removal](#card-art-limit-removal)
+  - [Card Exhaustion Fix](#card-exhaustion-fix)
+  - [`ban` on Weapons and Ranks](#ban-on-weapons-and-ranks)
   - [`add_listener()`](#add_listener-event-function)
   - [`remove_listener()`](#remove_listener-event-function)
   - [`new_special()`](#new_special-name-function)
@@ -21,6 +23,23 @@
  - To mark a card above `gid` 119 to the black team, add `real_team = 0` to the card.
   - Otherwise, cards above `gid` 119 will be marked as white.
  - Thanks to Glacies for finding out how to set the team!
+
+&#8202;
+
+#### Card Exhaustion Fix
+ - JP_API removes the limit of 5 cards when choosing a card.
+ - Nothing needs to be done to enable this feature.
+ - Thanks to Glacies for this feature!
+
+
+&#8202;
+
+#### `ban` on Weapons and Ranks
+ - Allows you to ban cards with specific weapons or ranks.
+ - To ban a card, add `ban = {"Card 1", "Card 2", ...}` to the weapon or rank.
+ - The ban does not apply to higher ranks, so to ban a card on all ranks above a certain rank, add `ban = {"Card 1", "Card 2", ...}` to all ranks above the first.
+ - Thanks to Glacies for this feature!
+
 
 &#8202;
 

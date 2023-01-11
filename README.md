@@ -12,7 +12,7 @@ As a note, doing this will require knowledge in both lua and SGK's base function
 
 ### Existing Project
 1. Copy the sections labeled `JP_API CODE` and `MOD CODE` into your mode's lua file.
-2. If you have custom logic in `get_weapons_list`, `initialize`, or `on_new_turn`, combine that with the copies in the `JP_API CODE`.
+2. If you have custom logic in `get_weapons_list` or `initialize`, combine that with the copies in the `JP_API CODE`.
 3. Add the line `mod_setup()` into your mode's `start` function.
 4. Add descriptions to your weapons using the `desc` key.
 
