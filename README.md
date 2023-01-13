@@ -61,3 +61,7 @@ Check out **[the docs](/doc/api.md)** for a much more complete explaination!
 If you have any questions, feel free to ask in the [Discord](https://discord.gg/dpQx647USm), or message me directily (JP12#1148)
 
 Have fun!
+
+## Special Thanks
+- PUNKCAKE Delicieux for making SGK
+- Glacies#5786 on discord for the fixes to the base game as well as various code for the API

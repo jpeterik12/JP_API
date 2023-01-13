@@ -153,6 +153,7 @@ do -- VERSION 1.3
   end
 
   -- LISTENER CODE
+  ons_updated = false
   function init_listeners()
     if LISTENER then
       del(ents, LISTENER)
@@ -160,51 +161,60 @@ do -- VERSION 1.3
     LISTENER = mke()
     LISTENER.listeners = {}
     LISTENER.specials = {}
+
     LISTENER.listeners["shot"] = {}
     LISTENER.listeners["blade"] = {}
     LISTENER.listeners["move"] = {}
     LISTENER.listeners["special"] = {}
+
     LISTENER.listeners["upd"] = {}
     LISTENER.listeners["dr"] = {}
+
     LISTENER.listeners["bullet_init"] = {}
     LISTENER.listeners["bullet_upd"] = {}
+
+    LISTENER.listeners["grenade_init"] = {}
+    LISTENER.listeners["grenade_upd"] = {}
+    LISTENER.listeners["grenade_bounce"] = {}
+    LISTENER.listeners["grenade_land"] = {}
+    LISTENER.listeners["grenade_explode"] = {}
+
+    LISTENER.listeners["bad_death"] = {}
+
     LISTENER.listeners["after_black"] = {}
     LISTENER.listeners["after_white"] = {}
-    local function card_fixing()
+    local function card_fixing(ent)
       function fix_card(tfcard)
+        tfcard.old_dr = tfcard.dr
+        tfcard.og_gid = tfcard.gid
         tfcard.dr = function(self)
-          if self.flip_co then
-            if self.flip_co > 0.5 then
-              dr_flip_card(self.x, self.y, 59 + self.team, self.flip_co)
-            else
-              dr_flip_card(self.x, self.y, self.gid, self.flip_co)
-            end
+          if self.flip_co and self.flip_co > 0.5 then
+            self.gid = 59 + self.team
           else
-            dr_flip_card(self.x, self.y, self.gid, 0)
+            self.gid = self.og_gid
           end
+          self.old_dr(self)
         end
       end
 
-      for ent in all(ents) do
-        if ent.gid and ent.gid >= 120 and not ent.card_counter then
-          fix_card(ent)
-        end
-        if ent.cards then
-          for sub_ent in all(ent.cards) do
-            if sub_ent.gid and sub_ent.gid >= 120 and not sub_ent.card_counter then
-              fix_card(sub_ent)
-            end
+      if ent.gid and ent.gid >= 120 and not ent.card_counter then
+        fix_card(ent)
+      end
+      if ent.cards then
+        for sub_ent in all(ent.cards) do
+          if sub_ent.gid and sub_ent.gid >= 120 and not sub_ent.card_counter then
+            fix_card(sub_ent)
           end
         end
       end
     end
 
-    local function click_tracking()
-      local function shoot_tracker(ent)
-        ent.old_left_clic = ent.left_clic
-        ent.left_clic = function()
+    local function click_tracking(ent)
+      local function shoot_tracker(ent2)
+        ent2.old_left_clic = ent2.left_clic
+        ent2.left_clic = function()
           local old_sq = hero.sq
-          ent.old_left_clic()
+          ent2.old_left_clic()
           if old_sq ~= hero.sq then
             for listener in all(LISTENER.listeners["move"]) do
               listener()
@@ -232,19 +242,19 @@ do -- VERSION 1.3
             end
           end
         end
-        if ent.right_clic then
+        if ent2.right_clic then
           local skip = false
           for special, func in pairs(LISTENER.specials) do
             if stack[special] then
-              ent.old_right_clic = func
+              ent2.old_right_clic = func
               skip = true
             end
           end
           if not skip then
-            ent.old_right_clic = ent.right_clic
+            ent2.old_right_clic = ent2.right_clic
           end
-          ent.right_clic = function()
-            ent.old_right_clic()
+          ent2.right_clic = function()
+            ent2.old_right_clic()
             for listener in all(LISTENER.listeners["special"]) do
               listener()
             end
@@ -252,35 +262,35 @@ do -- VERSION 1.3
         end
       end
 
-      local function blade_tracker(ent)
-        ent.old_left_clic = ent.left_clic
-        ent.left_clic = function()
+      local function blade_tracker(ent2)
+        ent2.old_left_clic = ent2.left_clic
+        ent2.left_clic = function()
           local folly = check_folly_shields(hero.sq)
           if folly then
             if ((#hero.sq.danger == 1) and (hero.sq.danger[1] == get_square_at(mx, my).p)) or stack.bushido then
               folly = false
             end
           end
-          ent.old_left_clic()
+          ent2.old_left_clic()
           if not folly then
             for listener in all(LISTENER.listeners["blade"]) do
               listener()
             end
           end
         end
-        if ent.right_clic then
+        if ent2.right_clic then
           local skip = false
           for special, func in pairs(LISTENER.specials) do
             if stack[special] then
-              ent.old_right_clic = func
+              ent2.old_right_clic = func
               skip = true
             end
           end
           if not skip then
-            ent.old_right_clic = ent.right_clic
+            ent2.old_right_clic = ent2.right_clic
           end
-          ent.right_clic = function()
-            ent.old_right_clic()
+          ent2.right_clic = function()
+            ent2.old_right_clic()
             for listener in all(LISTENER.listeners["special"]) do
               listener()
             end
@@ -288,30 +298,30 @@ do -- VERSION 1.3
         end
       end
 
-      local function move_tracker(ent)
-        ent.old_left_clic = ent.left_clic
-        ent.left_clic = function()
+      local function move_tracker(ent2)
+        ent2.old_left_clic = ent2.left_clic
+        ent2.left_clic = function()
           local old_sq = hero.sq
-          ent.old_left_clic()
+          ent2.old_left_clic()
           if old_sq ~= hero.sq then
             for listener in all(LISTENER.listeners["move"]) do
               listener()
             end
           end
         end
-        if ent.right_clic then
+        if ent2.right_clic then
           local skip = false
           for special, func in pairs(LISTENER.specials) do
             if stack[special] then
-              ent.old_right_clic = func
+              ent2.old_right_clic = func
               skip = true
             end
           end
           if not skip then
-            ent.old_right_clic = ent.right_clic
+            ent2.old_right_clic = ent2.right_clic
           end
-          ent.right_clic = function()
-            ent.old_right_clic()
+          ent2.right_clic = function()
+            ent2.old_right_clic()
             for listener in all(LISTENER.listeners["special"]) do
               listener()
             end
@@ -320,29 +330,75 @@ do -- VERSION 1.3
       end
 
       if not hero then return end
-      for ent in all(ents) do
-        local ent_sq = get_square_at(ent.x, ent.y)
-        if ent.button and ent_sq and ent.left_clic and not ent.old_left_clic then
-          local hero_square = hero.sq
-          if not hero_square then return end
-          if abs(ent_sq.px - hero_square.px) <= 1 and abs(ent_sq.py - hero_square.py) <= 1 then
-            -- WITHIN 3x3
-            if not ent_sq.p then move_tracker(ent)
-            elseif stack.blade and ent_sq.p.hp <= stack.blade then blade_tracker(ent)
-            else shoot_tracker(ent) end
-          else
-            shoot_tracker(ent)
-          end
+      local ent_sq = get_square_at(ent.x, ent.y)
+      if ent.button and ent_sq and ent.left_clic and not ent.old_left_clic then
+        local hero_square = hero.sq
+        if not hero_square then return end
+        if abs(ent_sq.px - hero_square.px) <= 1 and abs(ent_sq.py - hero_square.py) <= 1 then
+          -- WITHIN 3x3
+          if not ent_sq.p then move_tracker(ent)
+          elseif stack.blade and ent_sq.p.hp <= stack.blade then blade_tracker(ent)
+          else shoot_tracker(ent) end
+        else
+          shoot_tracker(ent)
         end
       end
+
+    end
+
+    local function grenade_tracking(ent) -- (Glacies)
+      local function setup_bounce(grenade)
+        if not grenade.twf then return end
+        grenade.old_twf = grenade.twf
+        grenade.state = (grenade.jz > 20)
+        grenade.twf = function()
+          if grenade.state then
+            for listener in all(LISTENER.listeners["grenade_bounce"]) do
+              listener(grenade)
+            end
+          else
+            for listener in all(LISTENER.listeners["grenade_land"]) do
+              listener(grenade)
+            end
+            local delay = 57
+            local sq = get_square_at(grenade.x, grenade.y)
+            if abs(hero.sq.px - sq.px) < 2 and abs(hero.sq.py - sq.py) < 2 then delay = 236 end
+            wait(delay, function()
+              for listener in all(LISTENER.listeners["grenade_explode"]) do
+                listener(grenade)
+              end
+            end)
+          end
+          grenade.old_twf()
+          setup_bounce(grenade)
+        end
+      end
+
+      if not ent.fra then return end
+      if ent.tracked then return end
+      ent.tracked = true
+      for listener in all(LISTENER.listeners["grenade_init"]) do
+        listener(ent)
+      end
+      ent.old_upd = ent.upd
+      ent.upd = function(self)
+        for listener in all(LISTENER.listeners["grenade_upd"]) do
+          listener(self)
+        end
+        self.old_upd(self)
+      end
+      setup_bounce(ent)
     end
 
     LISTENER.run = true
     LISTENER.jumping = false
     function LISTENER:upd()
       if not LISTENER.run then return end
-      click_tracking()
-      card_fixing()
+      for ent in all(ents) do
+        click_tracking(ent)
+        card_fixing(ent)
+        grenade_tracking(ent)
+      end
       for listener in all(LISTENER.listeners["upd"]) do
         listener()
       end
@@ -372,23 +428,36 @@ do -- VERSION 1.3
       end
     end
 
-    old_new_turn = on_new_turn
-    on_new_trun = function()
-      if old_new_turn then
-        old_new_turn()
+    if not ons_updated then
+      old_new_turn = on_new_turn
+      on_new_trun = function()
+        if old_new_turn then
+          old_new_turn()
+        end
+        for listener in all(LISTENER.listeners["after_white"]) do
+          listener()
+        end
       end
-      for listener in all(LISTENER.listeners["after_white"]) do
-        listener()
+
+      old_bad_death = on_bad_death
+      on_bad_death = function()
+        if old_bad_death then
+          old_bad_death()
+        end
+        for listener in all(LISTENER.listeners["bad_death"]) do
+          listener()
+        end
       end
     end
 
+    ons_updated = true
 
     do -- BAN CARDS (Glacies)
       if not mode.ban then mode.ban = {} end
       if mode.weapons and mode.weapons[mode.weapons_index + 1].ban then
         for ca in all(mode.weapons[mode.weapons_index + 1].ban) do
           add(mode.ban, ca)
-        end -- code by Glacies
+        end
       end
       if mode.ranks and mode.ranks[mode.ranks_index + 1].ban then
         for ca in all(mode.ranks[mode.ranks_index + 1].ban) do
@@ -403,9 +472,7 @@ do -- VERSION 1.3
         for ent in all(ents) do
           if ent.cards then
             for ca in all(ent.cards) do
-              if ca.flipped then
-                ca.flipped = false
-              end
+              ca.flipped = false
             end
           end
         end
