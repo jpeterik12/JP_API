@@ -478,18 +478,18 @@ do -- VERSION 1.4
         for ent in all(ents) do
           if ent.cards then
             for ca in all(ent.cards) do
-              wait(55 + 8 * total_choices, function(fcard)
-                if fcard.flipped then
-                  fcard.flipped = false
-                  fcard.old_upd = fcard.upd
-                  fcard.upd = nil
-                  wait(2, function(kcard)
-                    kcard.flipped = true
-                    kcard.upd = kcard.old_upd
-                    kcard.old_upd = nil
-                  end, fcard)
+              wait(55 + 8 * total_choices, function()
+                if ca.flipped then
+                  ca.flipped = false
+                  ca.old_upd = ca.upd
+                  ca.upd = nil
+                  wait(2, function()
+                    ca.flipped = true
+                    ca.upd = ca.old_upd
+                    ca.old_upd = nil
+                  end)
                 end
-              end, ca)
+              end)
             end
           end
         end
@@ -610,11 +610,17 @@ function grow()
   if mode.lvl < 11 then
     local data = {
       id = "level_up",
-      pan_xm = 1,
-      pan_ym = 2,
-      pan_width = 80,
-      pan_height = 96,
+      pan_xm = 2,
+      pan_ym = 4,
+      pan_width = 120,
+      pan_height = 120,
       choices = {
+        { { team = 0 }, { team = 1 } },
+        { { team = 0 }, { team = 1 } },
+        { { team = 0 }, { team = 1 } },
+        { { team = 0 }, { team = 1 } },
+        { { team = 0 }, { team = 1 } },
+        { { team = 0 }, { team = 1 } },
         { { team = 0 }, { team = 1 } },
         { { team = 0 }, { team = 1 } },
       },
