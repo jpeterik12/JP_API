@@ -469,10 +469,27 @@ do -- VERSION 1.4
       old_grow = grow
       grow = function()
         old_grow()
+        total_choices = 0
+        for ent in all(ents) do
+          if ent.cards then
+            total_choices = total_choices + 1
+          end
+        end
         for ent in all(ents) do
           if ent.cards then
             for ca in all(ent.cards) do
-              ca.flipped = false
+              wait(55 + 8 * total_choices, function(fcard)
+                if fcard.flipped then
+                  fcard.flipped = false
+                  fcard.old_upd = fcard.upd
+                  fcard.upd = nil
+                  wait(2, function(kcard)
+                    kcard.flipped = true
+                    kcard.upd = kcard.old_upd
+                    kcard.old_upd = nil
+                  end, fcard)
+                end
+              end, ca)
             end
           end
         end
