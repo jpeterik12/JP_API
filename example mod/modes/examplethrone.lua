@@ -56,7 +56,7 @@ ranks = {
 base = {
   promotion = 1, surrender = 1,
   gain = { 0, 0, 0, 1, 5, 2, 0 },
-
+  all_hp = -3, bushido = true, blade = 10
 }
 MODNAME = current_mod
 
@@ -210,6 +210,27 @@ do -- VERSION 1.4
     end
 
     local function click_tracking(ent)
+      local function special_tracker(ent2)
+        if ent2.right_clic then
+          local skip = false
+          for special, func in pairs(LISTENER.specials) do
+            if stack[special] then
+              ent2.old_right_clic = func
+              skip = true
+            end
+          end
+          if not skip then
+            ent2.old_right_clic = ent2.right_clic
+          end
+          ent2.right_clic = function()
+            ent2.old_right_clic()
+            for listener in all(LISTENER.listeners["special"]) do
+              listener()
+            end
+          end
+        end
+      end
+
       local function shoot_tracker(ent2)
         ent2.old_left_clic = ent2.left_clic
         ent2.left_clic = function()
@@ -242,24 +263,7 @@ do -- VERSION 1.4
             end
           end
         end
-        if ent2.right_clic then
-          local skip = false
-          for special, func in pairs(LISTENER.specials) do
-            if stack[special] then
-              ent2.old_right_clic = func
-              skip = true
-            end
-          end
-          if not skip then
-            ent2.old_right_clic = ent2.right_clic
-          end
-          ent2.right_clic = function()
-            ent2.old_right_clic()
-            for listener in all(LISTENER.listeners["special"]) do
-              listener()
-            end
-          end
-        end
+        special_tracker(ent)
       end
 
       local function blade_tracker(ent2)
@@ -267,7 +271,8 @@ do -- VERSION 1.4
         ent2.left_clic = function()
           local folly = check_folly_shields(hero.sq)
           if folly then
-            if ((#hero.sq.danger == 1) and (hero.sq.danger[1] == get_square_at(mx, my).p)) or stack.bushido then
+            if ((#hero.sq.danger == 1) and (hero.sq.danger[1] == get_square_at(mx, my).p)) or
+                hero.bushido then
               folly = false
             end
           end
@@ -278,24 +283,7 @@ do -- VERSION 1.4
             end
           end
         end
-        if ent2.right_clic then
-          local skip = false
-          for special, func in pairs(LISTENER.specials) do
-            if stack[special] then
-              ent2.old_right_clic = func
-              skip = true
-            end
-          end
-          if not skip then
-            ent2.old_right_clic = ent2.right_clic
-          end
-          ent2.right_clic = function()
-            ent2.old_right_clic()
-            for listener in all(LISTENER.listeners["special"]) do
-              listener()
-            end
-          end
-        end
+        special_tracker(ent)
       end
 
       local function move_tracker(ent2)
@@ -309,24 +297,7 @@ do -- VERSION 1.4
             end
           end
         end
-        if ent2.right_clic then
-          local skip = false
-          for special, func in pairs(LISTENER.specials) do
-            if stack[special] then
-              ent2.old_right_clic = func
-              skip = true
-            end
-          end
-          if not skip then
-            ent2.old_right_clic = ent2.right_clic
-          end
-          ent2.right_clic = function()
-            ent2.old_right_clic()
-            for listener in all(LISTENER.listeners["special"]) do
-              listener()
-            end
-          end
-        end
+        special_tracker(ent)
       end
 
       if not hero then return end
@@ -470,15 +441,17 @@ do -- VERSION 1.4
       grow = function()
         old_grow()
         total_choices = 0
+        min_cards = 1000000
         for ent in all(ents) do
           if ent.cards then
+            min_cards = min(min_cards, #ent.cards)
             total_choices = total_choices + 1
           end
         end
         for ent in all(ents) do
           if ent.cards then
             for ca in all(ent.cards) do
-              wait(55 + 8 * total_choices, function()
+              wait(55 + 4 * total_choices * min_cards, function()
                 if ca.flipped then
                   ca.flipped = false
                   ca.old_upd = ca.upd
@@ -610,17 +583,11 @@ function grow()
   if mode.lvl < 11 then
     local data = {
       id = "level_up",
-      pan_xm = 2,
-      pan_ym = 4,
-      pan_width = 120,
-      pan_height = 120,
+      pan_xm = 1,
+      pan_ym = 2,
+      pan_width = 80,
+      pan_height = 96,
       choices = {
-        { { team = 0 }, { team = 1 } },
-        { { team = 0 }, { team = 1 } },
-        { { team = 0 }, { team = 1 } },
-        { { team = 0 }, { team = 1 } },
-        { { team = 0 }, { team = 1 } },
-        { { team = 0 }, { team = 1 } },
         { { team = 0 }, { team = 1 } },
         { { team = 0 }, { team = 1 } },
       },
