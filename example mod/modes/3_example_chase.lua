@@ -549,6 +549,14 @@ do -- VERSION 1.6
 end
 -- JP_API CODE END
 
+-- MOD CODE
+do
+  function mod_setup()
+    init_listeners()
+  end
+end
+-- MOD CODE END
+
 function start()
   init_game()
   lvl = 0
