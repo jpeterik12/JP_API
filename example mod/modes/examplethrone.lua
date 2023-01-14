@@ -398,62 +398,59 @@ do -- VERSION 1.4
       end
     end
 
-    if not ons_updated then
-      old_new_turn = on_new_turn
-      on_new_trun = function()
-        if old_new_turn then
-          old_new_turn()
-        end
-        for listener in all(LISTENER.listeners["after_white"]) do
-          listener()
-        end
+    local old_new_turn = on_new_turn
+    on_new_trun = function()
+      if old_new_turn then
+        old_new_turn()
       end
-
-      old_bad_death = on_bad_death
-      on_bad_death = function()
-        if old_bad_death then
-          old_bad_death()
-        end
-        for listener in all(LISTENER.listeners["bad_death"]) do
-          listener()
-        end
+      for listener in all(LISTENER.listeners["after_white"]) do
+        listener()
       end
+    end
 
-      do -- FIX EXHAUST (Glacies)
-        old_grow = grow
-        grow = function()
-          old_grow()
-          total_choices = 0
-          min_cards = 1000000
-          for ent in all(ents) do
-            if ent.cards then
-              min_cards = min(min_cards, #ent.cards)
-              total_choices = total_choices + 1
-            end
+    local old_bad_death = on_bad_death
+    on_bad_death = function()
+      if old_bad_death then
+        old_bad_death()
+      end
+      for listener in all(LISTENER.listeners["bad_death"]) do
+        listener()
+      end
+    end
+
+    do -- FIX EXHAUST (Glacies)
+      local old_grow = grow
+      grow = function()
+        old_grow()
+        total_choices = 0
+        min_cards = 1000000
+        for ent in all(ents) do
+          if ent.cards then
+            min_cards = min(min_cards, #ent.cards)
+            total_choices = total_choices + 1
           end
-          for ent in all(ents) do
-            if ent.cards then
-              for ca in all(ent.cards) do
-                wait(55 + 4 * total_choices * min_cards, function()
-                  if ca.flipped then
-                    ca.flipped = false
-                    ca.old_upd = ca.upd
-                    ca.upd = nil
-                    wait(2, function()
-                      ca.flipped = true
-                      ca.upd = ca.old_upd
-                      ca.old_upd = nil
-                    end)
-                  end
-                end)
-              end
+        end
+        for ent in all(ents) do
+          if ent.cards then
+            for ca in all(ent.cards) do
+              wait(55 + 4 * total_choices * min_cards, function()
+                if ca.flipped then
+                  ca.flipped = false
+                  ca.old_upd = ca.upd
+                  ca.upd = nil
+                  wait(2, function()
+                    ca.flipped = true
+                    ca.upd = ca.old_upd
+                    ca.old_upd = nil
+                  end)
+                end
+              end)
             end
           end
         end
       end
     end
 
-    ons_updated = true
 
     do -- BAN CARDS (Glacies)
       if not mode.ban then mode.ban = {} end
