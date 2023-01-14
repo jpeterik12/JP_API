@@ -61,7 +61,7 @@ MODNAME = current_mod
 
 
 -- JP_API CODE
-do -- VERSION 1.5
+do -- VERSION 1.6
   -- LOGGING CODE
   function _logv(o, start_str)
     if not start_str then
@@ -225,12 +225,14 @@ do -- VERSION 1.5
               end
               local delay = 57
               local sq = get_square_at(grenade.x, grenade.y)
-              if abs(hero.sq.px - sq.px) < 2 and abs(hero.sq.py - sq.py) < 2 then delay = 236 end
-              wait(delay, function()
-                for listener in all(LISTENER.listeners["grenade_explode"]) do
-                  listener(grenade)
-                end
-              end)
+              if sq then
+                if abs(hero.sq.px - sq.px) < 2 and abs(hero.sq.py - sq.py) < 2 then delay = 236 end
+                wait(delay, function()
+                  for listener in all(LISTENER.listeners["grenade_explode"]) do
+                    listener(grenade)
+                  end
+                end)
+              end
             end
             grenade.old_twf()
             setup_bounce(grenade)
@@ -393,7 +395,7 @@ do -- VERSION 1.5
 
     function LISTENER:dr()
       if not LISTENER.run then return end
-      lprint("JP_API 1.5", 250, 162.5, 2)
+      lprint("JP_API 1.6", 250, 162.5, 2)
       lprint(MODNAME, 5, 162.5, 2)
       for listener in all(LISTENER.listeners["dr"]) do
         listener()
