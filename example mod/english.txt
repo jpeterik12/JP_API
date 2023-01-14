@@ -1,6 +1,11 @@
 
 -- MENU
-examplethrone::example throne
-examplethrone_desc::copy of throne but with JP API embedded
+1_example_throne::example throne
+1_example_throne_desc::copy of throne but with JP API embedded
+2_example_endless::example endless
+2_example_endless_desc::copy of endless but with JP API embedded
+3_example_chase::example chase
+3_example_chase_desc::copy of chase but with JP API embedded
+
 credits::modder: JP_12
 

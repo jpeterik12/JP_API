@@ -1,4 +1,4 @@
-id = "examplechase"
+id = "3_example_chase"
 ban = {
   "Egotic Maelstrom",
   "Undercover Mission",

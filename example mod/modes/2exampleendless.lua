@@ -1,4 +1,4 @@
-id = "examplethrone"
+id = "2_example_endless"
 setup = {
   slots_max = { 10, 10 },
 }
@@ -36,26 +36,9 @@ weapons = {
   { gid = 15, name = "Example 15", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
     desc = "Description 15" },
 }
-ranks = {
-  { nothing = 1 },
-  { gain = { 0, 0 } },
-  { gain = { 3 } },
-  { king_hp = 1 },
-  { gain = { 1 } },
-  { spread = 10 },
-  { king_hp = 1 },
-  { gain = { 2 } },
-  { rook_hp = 1 },
-  { knight_hp = 1 },
-  { boss_hprc = 200 },
-  { spread = 15 },
-  { rook_hp = 1 },
-  { ammo_max = -1 },
-  { all_hp = 1, ammo_max = 2 },
-}
 base = {
   promotion = 1, surrender = 1,
-  gain = { 0, 0, 0, 1, 5, 2, 0 }
+  gain = { 3, 0, 0, 0, 1, 5, 2, 0 }
 }
 
 
@@ -566,18 +549,14 @@ end
 -- MOD CODE END
 
 function start()
+  init_game()
+  mode.lvl = 0
 
-  init_vig({ 1, 2, 3 }, function()
-    init_game()
-    mode.lvl = 0
-    mode.turns = 0
+  -- MOD CODE
+  mod_setup()
+  -- END MOD CODE
 
-    -- MOD SETUP
-    mod_setup()
-
-    next_floor()
-  end)
-
+  next_floor()
 end
 
 function next_floor()
@@ -585,113 +564,43 @@ function next_floor()
   new_level()
 end
 
-function grow()
-  if mode.lvl < 11 then
-    local data = {
-      id = "level_up",
-      pan_xm = 1,
-      pan_ym = 2,
-      pan_width = 80,
-      pan_height = 96,
-      choices = {
-        { { team = 0 }, { team = 1 } },
-        { { team = 0 }, { team = 1 } },
-      },
-      force = {
-        { lvl = 3, id = "Homecoming", choice_index = 0, card_index = 1, desc_key = "queen_escape" },
-        { lvl = 3, id = "Homecoming", choice_index = 1, card_index = 1, desc_key = "queen_everywhere" }
-      }
-    }
-    level_up(data, next_floor)
-  elseif mode.lvl == 11 then
-    add(upgrades, { gain = { 6 }, sac = { 5 } })
-    init_vig({ 4 }, next_floor)
-  end
-end
-
-function outro()
-
-  local v = { 6, 7 }
-  local best = 13
-  trig_achievement("COMPLETE")
-
-  if boss.book then
-    best = 14
-    v = { 8, 6, 11 }
-    trig_achievement("AVENGED")
-    if chamber > 0 then
-      best = 15
-      v = { 8, 9, 10, 6, 12 }
-      trig_achievement("EXORCISED")
-    end
-  end
-
-  -- BEST FLOOR
-  local rank = mode.ranks_index + 1
-  progress(rank, 1, bfl)
-
-  -- BEST RANK
-  progress(0, 1, rank)
-
-  -- BEST TIME
-  if opt("speedrun") == 1 then
-    local best_time = bget(rank, 2)
-    if best_time == 0 or chrono_time < best_time then
-      bset(rank, 2, chrono_time)
-      new_best_time = true
-    end
-  end
-  --
-  save()
-
-
-  -- COLLECTION
-  check_collections()
-
-
-  init_vig(v, init_menu)
-end
-
--- ON
 function on_empty()
   end_level(grow)
-
 end
 
 function on_hero_death()
-  progress(mode.ranks_index + 1, 1, mode.lvl)
+  progress(0, 2, mode.lvl)
   check_collections()
   save()
   gameover()
 end
 
-function on_boss_death()
-  -- CHECK BLACK BISHOP SPAWN
-  local bishops = get_pieces(2)
-  local book = has_card("The Red Book")
-  local theo = perm["Theocracy"]
-  if book and theo and (#bishops == 1 or (DEV and #bishops >= 1)) then
-    bishops[1].chosen = true
-    spawn_dark_bishop()
-    return
+function grow()
+
+  local data = {
+    id = "level_up",
+    pan_xm = 1,
+    pan_ym = 2,
+    pan_width = 80,
+    pan_height = 96,
+    choices = {
+      { { team = 0 }, { team = 1 } },
+      { { team = 0 }, { team = 1 } },
+    },
+    force = {
+      { lvl = 3, id = "Homecoming", choice_index = 0, card_index = 1, desc_key = "queen_escape" },
+      { lvl = 3, id = "Homecoming", choice_index = 1, card_index = 1, desc_key = "queen_everywhere" }
+    }
+  }
+
+
+  if mode.lvl < 11 then
+    level_up(data, next_floor)
+  else
+    decay_up(next_floor)
   end
-
-  -- END GAME
-  music("ending_A", 0)
-  fade_to(-4, 30, outro)
-
 end
 
-function check_unlocks()
-end
-
-function save_preferences()
-  bset(0, 4, mode.ranks_index)
-  bset(1, 4, mode.weapons_index)
-  save()
-end
-
---
 function draw_inter()
   local s = lang.floor_
   local x = lprint(s, MCW / 2, board_y - 19, 3, 1)
