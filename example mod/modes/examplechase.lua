@@ -1,7 +1,21 @@
-id = "examplethrone"
-setup = {
-  slots_max = { 10, 10 },
+id = "examplechase"
+ban = {
+  "Egotic Maelstrom",
+  "Undercover Mission",
+  "Unholy Call",
+  "Imperial Shot Put",
 }
+setup = {
+  slots_max = { 5, 0 },
+}
+base = {
+  ammo_regen = 1, king_hp = -2, militia = 1
+}
+proba = { 0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4 }
+pieces_danger = { 1, 3, 3, 6, 9, 0 }
+fill_last_slot = true
+turns = 0
+
 weapons = {
   { gid = 0, name = "Example 0", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
     desc = "Description 0" },
@@ -36,28 +50,6 @@ weapons = {
   { gid = 15, name = "Example 15", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
     desc = "Description 15" },
 }
-ranks = {
-  { nothing = 1 },
-  { gain = { 0, 0 } },
-  { gain = { 3 } },
-  { king_hp = 1 },
-  { gain = { 1 } },
-  { spread = 10 },
-  { king_hp = 1 },
-  { gain = { 2 } },
-  { rook_hp = 1 },
-  { knight_hp = 1 },
-  { boss_hprc = 200 },
-  { spread = 15 },
-  { rook_hp = 1 },
-  { ammo_max = -1 },
-  { all_hp = 1, ammo_max = 2 },
-}
-base = {
-  promotion = 1, surrender = 1,
-  gain = { 0, 0, 0, 1, 5, 2, 0 }
-}
-
 
 -- JP_API CODE
 do -- VERSION 1.6
@@ -557,143 +549,151 @@ do -- VERSION 1.6
 end
 -- JP_API CODE END
 
--- MOD CODE
-do
-  function mod_setup()
-    init_listeners()
-  end
-end
--- MOD CODE END
-
 function start()
+  init_game()
+  lvl = 0
 
-  init_vig({ 1, 2, 3 }, function()
-    init_game()
-    mode.lvl = 0
-    mode.turns = 0
+  -- SPAWNER
+  score = 0
+  dif = 2
+  mode.turns = 0
 
-    -- MOD SETUP
-    mod_setup()
+  -- MOD CODE
+  mod_setup()
+  -- END MOD CODE
 
-    next_floor()
-  end)
-
-end
-
-function next_floor()
-  mode.lvl = mode.lvl + 1
+  -- LEVEL
   new_level()
-end
 
-function grow()
-  if mode.lvl < 11 then
-    local data = {
-      id = "level_up",
-      pan_xm = 1,
-      pan_ym = 2,
-      pan_width = 80,
-      pan_height = 96,
-      choices = {
-        { { team = 0 }, { team = 1 } },
-        { { team = 0 }, { team = 1 } },
-      },
-      force = {
-        { lvl = 3, id = "Homecoming", choice_index = 0, card_index = 1, desc_key = "queen_escape" },
-        { lvl = 3, id = "Homecoming", choice_index = 1, card_index = 1, desc_key = "queen_everywhere" }
-      }
-    }
-    level_up(data, next_floor)
-  elseif mode.lvl == 11 then
-    add(upgrades, { gain = { 6 }, sac = { 5 } })
-    init_vig({ 4 }, next_floor)
-  end
-end
+  -- FIRST SPAWN
+  add_event(ev_side_spawn, { 0, 0, 0 })
 
-function outro()
-
-  local v = { 6, 7 }
-  local best = 13
-  trig_achievement("COMPLETE")
-
-  if boss.book then
-    best = 14
-    v = { 8, 6, 11 }
-    trig_achievement("AVENGED")
-    if chamber > 0 then
-      best = 15
-      v = { 8, 9, 10, 6, 12 }
-      trig_achievement("EXORCISED")
-    end
-  end
-
-  -- BEST FLOOR
-  local rank = mode.ranks_index + 1
-  progress(rank, 1, bfl)
-
-  -- BEST RANK
-  progress(0, 1, rank)
-
-  -- BEST TIME
-  if opt("speedrun") == 1 then
-    local best_time = bget(rank, 2)
-    if best_time == 0 or chrono_time < best_time then
-      bset(rank, 2, chrono_time)
-      new_best_time = true
-    end
-  end
   --
-  save()
+  --add_card("Militia")
 
 
-  -- COLLECTION
-  check_collections()
+end
 
+function on_king_death()
 
-  init_vig(v, init_menu)
+  --[[
+	local data={
+		id="level_up", 
+		pan_xm=3,
+		pan_ym=1, 
+		pan_width=128,
+		pan_height=64,
+		choices={
+			{{team=0}},{{team=0}},{{team=0}},
+		},
+	}
+
+	add_event(bind(level_up,data,new_turn))
+	
+	--]]
+end
+
+function get_slot_data(team, i)
+  if team == 1 or i > 4 then return nil end
+
+  local data = {
+    x = 16,
+    y = 4 + i * 32,
+    team = team,
+    side_icon = i == 0 and 0 or 1,
+  }
+  return data
 end
 
 -- ON
-function on_empty()
-  end_level(grow)
-
-end
-
 function on_hero_death()
-  progress(mode.ranks_index + 1, 1, mode.lvl)
-  check_collections()
+  progress(0, 3, score)
+  progress(1, 3, turns)
   save()
   gameover()
 end
 
-function on_boss_death()
-  -- CHECK BLACK BISHOP SPAWN
-  local bishops = get_pieces(2)
-  local book = has_card("The Red Book")
-  local theo = perm["Theocracy"]
-  if book and theo and (#bishops == 1 or (DEV and #bishops >= 1)) then
-    bishops[1].chosen = true
-    spawn_dark_bishop()
-    return
+function on_new_turn()
+  dif = dif + 1 / 8
+  local danger = 0
+  for b in all(bads) do
+    danger = danger + (pieces_danger[b.type + 1] or 0)
   end
 
-  -- END GAME
-  music("ending_A", 0)
-  fade_to(-4, 30, outro)
 
+
+  -- NEW WAVE
+  local tdif = dif + #get_slot_cards()
+
+  if danger < tdif * .85 then
+    sfx("conscription")
+    local a = {}
+    while danger < tdif do
+      local tp = rnd(proba)
+      add(a, tp)
+      danger = danger + PIECES[tp + 1].danger
+      add_event(ev_side_spawn, tp)
+    end
+  end
+
+
+
+  -- NEW KING
+  if mode.turns % 15 == 5 then
+    add_event(ev_side_spawn, 5)
+  end
+
+  -- NEW AMMO BOX
+  if mode.turns % 20 == 10 then
+    add_event(ev_spawn_item, "ammo_box")
+  end
 end
 
-function check_unlocks()
-end
+function on_bad_death(e)
+  local danger = pieces_danger[e.type + 1]
+  if not danger then return end
+  local bounty = danger * 5
+  score = score + bounty
 
-function save_preferences()
-  bset(0, 4, mode.ranks_index)
-  bset(1, 4, mode.weapons_index)
-  save()
+  if e.type == 5 then
+    local data = {
+      id = "level_up",
+      pan_xm = 3,
+      pan_ym = 1,
+      pan_width = 128,
+      pan_height = 64,
+      choices = {
+        { { team = 0 } }, { { team = 0 } }, { { team = 0 } },
+      },
+    }
+    add_event(bind(level_up, data, new_turn))
+  end
+
+
+  --[[
+	local p=mke(0,e.x,e.y)
+	p.dp=DP_FX
+	p.life=60
+	p.vy=-2
+	p.frict=.92
+	p.dr=function(e,x,y)
+		local str=bounty..""
+		lprint(str,x,y,4,1,1)
+	end
+	--]]
+
+
 end
 
 --
 function draw_inter()
-  local s = lang.floor_
+  local s = lang.score_
   local x = lprint(s, MCW / 2, board_y - 19, 3, 1)
-  lprint(mode.lvl, x, board_y - 19, 5)
+  lprint(score, x, board_y - 19, 5)
 end
+
+-- NEED SOLVE
+-- cards with sacrifice or adding piece
+-- can't use wand/grenade the turn I get them
+
+-- ? 1+ mist ?
