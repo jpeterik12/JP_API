@@ -55,8 +55,7 @@ ranks = {
 }
 base = {
   promotion = 1, surrender = 1,
-  gain = { 0, 0, 0, 1, 5, 2, 0 },
-  all_hp = -3, bushido = true, blade = 10
+  gain = { 0, 0, 0, 1, 5, 2, 0 }
 }
 MODNAME = current_mod
 
@@ -419,6 +418,39 @@ do -- VERSION 1.4
           listener()
         end
       end
+
+      do -- FIX EXHAUST (Glacies)
+        old_grow = grow
+        grow = function()
+          old_grow()
+          total_choices = 0
+          min_cards = 1000000
+          for ent in all(ents) do
+            if ent.cards then
+              min_cards = min(min_cards, #ent.cards)
+              total_choices = total_choices + 1
+            end
+          end
+          for ent in all(ents) do
+            if ent.cards then
+              for ca in all(ent.cards) do
+                wait(55 + 4 * total_choices * min_cards, function()
+                  if ca.flipped then
+                    ca.flipped = false
+                    ca.old_upd = ca.upd
+                    ca.upd = nil
+                    wait(2, function()
+                      ca.flipped = true
+                      ca.upd = ca.old_upd
+                      ca.old_upd = nil
+                    end)
+                  end
+                end)
+              end
+            end
+          end
+        end
+      end
     end
 
     ons_updated = true
@@ -433,38 +465,6 @@ do -- VERSION 1.4
       if mode.ranks and mode.ranks[mode.ranks_index + 1].ban then
         for ca in all(mode.ranks[mode.ranks_index + 1].ban) do
           add(mode.ban, ca)
-        end
-      end
-    end
-    do -- FIX EXHAUST (Glacies)
-      old_grow = grow
-      grow = function()
-        old_grow()
-        total_choices = 0
-        min_cards = 1000000
-        for ent in all(ents) do
-          if ent.cards then
-            min_cards = min(min_cards, #ent.cards)
-            total_choices = total_choices + 1
-          end
-        end
-        for ent in all(ents) do
-          if ent.cards then
-            for ca in all(ent.cards) do
-              wait(55 + 4 * total_choices * min_cards, function()
-                if ca.flipped then
-                  ca.flipped = false
-                  ca.old_upd = ca.upd
-                  ca.upd = nil
-                  wait(2, function()
-                    ca.flipped = true
-                    ca.upd = ca.old_upd
-                    ca.old_upd = nil
-                  end)
-                end
-              end)
-            end
-          end
         end
       end
     end
