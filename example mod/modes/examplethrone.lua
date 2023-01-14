@@ -61,7 +61,7 @@ MODNAME = current_mod
 
 
 -- JP_API CODE
-do -- VERSION 1.4
+do -- VERSION 1.5
   -- LOGGING CODE
   function _logv(o, start_str)
     if not start_str then
@@ -209,6 +209,50 @@ do -- VERSION 1.4
     end
 
     local function click_tracking(ent)
+      local function grenade_tracking(ent) -- (Glacies)
+        local function setup_bounce(grenade)
+          if not grenade.twf then return end
+          grenade.old_twf = grenade.twf
+          grenade.state = (grenade.jz > 20)
+          grenade.twf = function()
+            if grenade.state then
+              for listener in all(LISTENER.listeners["grenade_bounce"]) do
+                listener(grenade)
+              end
+            else
+              for listener in all(LISTENER.listeners["grenade_land"]) do
+                listener(grenade)
+              end
+              local delay = 57
+              local sq = get_square_at(grenade.x, grenade.y)
+              if abs(hero.sq.px - sq.px) < 2 and abs(hero.sq.py - sq.py) < 2 then delay = 236 end
+              wait(delay, function()
+                for listener in all(LISTENER.listeners["grenade_explode"]) do
+                  listener(grenade)
+                end
+              end)
+            end
+            grenade.old_twf()
+            setup_bounce(grenade)
+          end
+        end
+
+        if not ent.fra then return end
+        if ent.tracked then return end
+        ent.tracked = true
+        for listener in all(LISTENER.listeners["grenade_init"]) do
+          listener(ent)
+        end
+        ent.old_upd = ent.upd
+        ent.upd = function(self)
+          for listener in all(LISTENER.listeners["grenade_upd"]) do
+            listener(self)
+          end
+          self.old_upd(self)
+        end
+        setup_bounce(ent)
+      end
+
       local function special_tracker(ent2)
         if ent2.right_clic then
           local skip = false
@@ -225,6 +269,9 @@ do -- VERSION 1.4
             ent2.old_right_clic()
             for listener in all(LISTENER.listeners["special"]) do
               listener()
+            end
+            for ent3 in all(ents) do
+              grenade_tracking(ent3)
             end
           end
         end
@@ -316,50 +363,6 @@ do -- VERSION 1.4
 
     end
 
-    local function grenade_tracking(ent) -- (Glacies)
-      local function setup_bounce(grenade)
-        if not grenade.twf then return end
-        grenade.old_twf = grenade.twf
-        grenade.state = (grenade.jz > 20)
-        grenade.twf = function()
-          if grenade.state then
-            for listener in all(LISTENER.listeners["grenade_bounce"]) do
-              listener(grenade)
-            end
-          else
-            for listener in all(LISTENER.listeners["grenade_land"]) do
-              listener(grenade)
-            end
-            local delay = 57
-            local sq = get_square_at(grenade.x, grenade.y)
-            if abs(hero.sq.px - sq.px) < 2 and abs(hero.sq.py - sq.py) < 2 then delay = 236 end
-            wait(delay, function()
-              for listener in all(LISTENER.listeners["grenade_explode"]) do
-                listener(grenade)
-              end
-            end)
-          end
-          grenade.old_twf()
-          setup_bounce(grenade)
-        end
-      end
-
-      if not ent.fra then return end
-      if ent.tracked then return end
-      ent.tracked = true
-      for listener in all(LISTENER.listeners["grenade_init"]) do
-        listener(ent)
-      end
-      ent.old_upd = ent.upd
-      ent.upd = function(self)
-        for listener in all(LISTENER.listeners["grenade_upd"]) do
-          listener(self)
-        end
-        self.old_upd(self)
-      end
-      setup_bounce(ent)
-    end
-
     LISTENER.run = true
     LISTENER.jumping = false
     function LISTENER:upd()
@@ -367,7 +370,6 @@ do -- VERSION 1.4
       for ent in all(ents) do
         click_tracking(ent)
         card_fixing(ent)
-        grenade_tracking(ent)
       end
       for listener in all(LISTENER.listeners["upd"]) do
         listener()
@@ -391,7 +393,7 @@ do -- VERSION 1.4
 
     function LISTENER:dr()
       if not LISTENER.run then return end
-      lprint("JP_API 1.4", 250, 162.5, 2)
+      lprint("JP_API 1.5", 250, 162.5, 2)
       lprint(MODNAME, 5, 162.5, 2)
       for listener in all(LISTENER.listeners["dr"]) do
         listener()
@@ -544,6 +546,11 @@ do -- VERSION 1.4
     end
     enable_description()
     return a
+  end
+
+  -- FIXES COND_ONLY_PIECE
+  if not lang["cond_only_piece"] then
+    lang["cond_only_piece"] = "There's only $0 on the board"
   end
 end
 -- JP_API CODE END
