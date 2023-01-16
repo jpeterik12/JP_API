@@ -43,7 +43,7 @@ base = {
 
 
 -- JP_API CODE
-do -- VERSION 1.6
+do -- VERSION 1.7
   MODNAME = current_mod
   -- LOGGING CODE
   function _logv(o, start_str, max_depth)
@@ -179,13 +179,14 @@ do -- VERSION 1.6
       function fix_card(tfcard)
         tfcard.old_dr = tfcard.dr
         tfcard.og_gid = tfcard.gid
-        tfcard.dr = function(self)
+        tfcard.card_counter = true
+        tfcard.dr = function(self, ...)
           if self.flip_co and self.flip_co > 0.5 then
             self.gid = 59 + self.team
           else
             self.gid = self.og_gid
           end
-          self.old_dr(self)
+          self.old_dr(self, unpack({ ... }))
         end
       end
 
@@ -388,7 +389,7 @@ do -- VERSION 1.6
 
     function LISTENER:dr()
       if not LISTENER.run then return end
-      lprint("JP_API 1.6", 250, 162.5, 2)
+      lprint("JP_API 1.7", 250, 162.5, 2)
       lprint(MODNAME, 5, 162.5, 2)
       for listener in all(LISTENER.listeners["dr"]) do
         listener()
