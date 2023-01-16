@@ -1,29 +1,37 @@
-# JP Shotgun King API
+# JP_API for Shotgun King
+
 A listener based API for use with *Shotgun King: The Final Checkmate* by PUNKCAKE Delicieux.
 This allows easier creation of mods, as well as adding a few nice to haves.
-
 
 **[Go to the documentation!](/doc/api.md)**
 
 ## Getting started
-As a note, doing this will require knowledge in both lua and SGK's base functions 
+
+As a note, doing this will require knowledge in both lua and SGK's base functions
+
 ### New Project
+
 1. Copy the example mod into your mod folder and start editing.
 
 ### Existing Project
+
 1. Copy the sections labeled `JP_API CODE` and `MOD CODE` into your mode's lua file.
 2. If you have custom logic in `get_weapons_list` or `initialize`, combine that with the copies in the `JP_API CODE`.
 3. Add the line `mod_setup()` into your mode's `start` function.
 4. Add descriptions to your weapons using the `desc` key.
 
 ## Usage
+
 Custom Code should be written in the section labeled `MOD CODE`, as distinct modules that are a single function. Then add that function to the `mod_setup` function.
 
 ## Updating
+
 To update the API, simply copy the `JP_API CODE` section from the latest version into your mode's lua file.
 
 ## Example
+
 Here is an example that simply logs each time some event occurs
+
 ```lua
 ...
 -- MOD CODE
@@ -54,6 +62,7 @@ end
 -- MOD CODE END
 ...
 ```
+
 For a more complete example, check out the [example mods](/examples/).
 
 Check out **[the docs](/doc/api.md)** for a much more complete explaination!
@@ -63,5 +72,6 @@ If you have any questions, feel free to ask in the [Discord](https://discord.gg/
 Have fun!
 
 ## Special Thanks
+
 - PUNKCAKE Delicieux for making SGK
 - Glacies#5786 on discord for the fixes to the base game as well as various code for the API
