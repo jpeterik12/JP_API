@@ -46,11 +46,14 @@ base = {
 do -- VERSION 1.6
   MODNAME = current_mod
   -- LOGGING CODE
-  function _logv(o, start_str)
+  function _logv(o, start_str, max_depth)
     if not start_str then
       start_str = ""
     end
-    local function data_tostring_recursive(data, depth)
+    if not max_depth then
+      max_depth = 4
+    end
+    local function data_tostring_recursive(data, depth, parent)
       local function indent(n)
         local str = ""
         for i = 0, n do
@@ -76,17 +79,21 @@ do -- VERSION 1.6
       elseif data_type == type(function() end) then
         return "function()"
       elseif data_type == type({}) then
-        if depth == 4 then
+        if depth == max_depth then
           return "{...}"
         end
         local data_string = "{"
         for key, value in pairs(data) do
-          if value == "_G" then
+          if value == _G then
             data_string = data_string .. "\n" .. indent(depth) ..
-                "_G: {...}," -- don't recurse into _G
+                data_tostring_recursive(key, depth + 1, data) .. ": {_G}," -- don't recurse into _G
+          elseif value == parent then
+            data_string = data_string .. "\n" .. indent(depth) ..
+                data_tostring_recursive(key, depth + 1, data) .. ": {parent}," -- don't recurse into parent
           else
             data_string = data_string .. "\n" .. indent(depth) ..
-                data_tostring_recursive(key, depth + 1) .. ": " .. data_tostring_recursive(value, depth + 1) .. ","
+                data_tostring_recursive(key, depth + 1, data) ..
+                ": " .. data_tostring_recursive(value, depth + 1, data) .. ","
           end
         end
         if data_string == "{" then
@@ -105,7 +112,10 @@ do -- VERSION 1.6
     _log("DATA START: " .. start_str .. "\n" .. data_tostring_recursive(o, 0) .. "\nDATA END")
   end
 
-  function _logs(o, value)
+  function _logs(o, value, max_depth)
+    if not max_depth then
+      max_depth = 4
+    end
     local function search_recurse(p, v, d, path)
       if type(p) == type({}) then
         for k, v2 in pairs(p) do
@@ -115,7 +125,7 @@ do -- VERSION 1.6
             else
               _log(path .. "[non-string key]")
             end
-          elseif (d < 4) and (v2 ~= _G) then
+          elseif (d < max_depth) and (v2 ~= _G) then
             if (type(k) == type("")) or (type(k) == type(1)) then
               search_recurse(v2, v, d + 1, path .. "." .. k)
             else
@@ -409,18 +419,16 @@ do -- VERSION 1.6
       local old_grow = grow
       grow = function()
         old_grow()
-        total_choices = 0
-        min_cards = 1000000
+        local total_choices = 0
         for ent in all(ents) do
           if ent.cards then
-            min_cards = min(min_cards, #ent.cards)
             total_choices = total_choices + 1
           end
         end
         for ent in all(ents) do
           if ent.cards then
             for ca in all(ent.cards) do
-              wait(55 + 4 * total_choices * min_cards, function()
+              wait(23 + 8 * total_choices + 16 * #ent.cards, function()
                 if ca.flipped then
                   ca.flipped = false
                   ca.old_upd = ca.upd
@@ -488,39 +496,43 @@ do -- VERSION 1.6
   end
 
   -- GUN DESCRIPTIONS
-  desc_start = true
   function enable_description()
-    local x = {}
-    if weapons[mode.weapons_index + 1].desc then
-      x = mk_hint_but(280, 64, 8, 9, weapons[mode.weapons_index + 1].desc, { 4 }, 100, nil, { x = 170, y = 75 })
-    else
-      x = mke()
-    end
-    x.lastindex = mode.weapons_index
-    if (desc_start) then
-      desc_start = false
-      wait(30, function()
-        x.dr = function(self)
-          if weapons[mode.weapons_index + 1].desc then
-            lprint("?", 284, 67, 5)
-          end
-          if (mode.weapons_index ~= self.lastindex) then
-            del(ents, self)
-            enable_description()
-          end
-        end
-      end)
-    else
+    local function spawn_description()
+      local hinty = 67
+      if not mode.ranks then hinty = 40 end
+      local x = {}
+      if weapons[mode.weapons_index + 1].desc then
+        x = mk_hint_but(280, hinty - 3, 8, 9, weapons[mode.weapons_index + 1].desc, { 4 }, 100, nil,
+          { x = 170, y = hinty + 8 })
+        x.button = false
+      else
+        x = mke()
+      end
+      x.lastindex = mode.weapons_index
       x.dr = function(self)
+        if (not mode.weapons_index) then
+          del(ents, self)
+          return
+        end
         if weapons[mode.weapons_index + 1].desc then
-          lprint("?", 284, 67, 5)
+          local printy = -10
+          for ent in all(ents) do
+            if ent.id == "weapons" then
+              printy = ent.y + 1
+            end
+          end
+          lprint("?", 284, printy, 5)
         end
         if (mode.weapons_index ~= self.lastindex) then
           del(ents, self)
-          enable_description()
+          spawn_description()
         end
       end
     end
+
+    if not mode.weapons then return end
+    spawn_description()
+
   end
 
   -- NEEDED FOR GUN DESCRIPTIONS
