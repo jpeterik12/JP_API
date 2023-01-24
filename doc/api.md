@@ -6,6 +6,7 @@
     - [Card Exhaustion Fix](#card-exhaustion-fix)
     - [Gun Descriptions](#gun-and-rank-descriptions)
     - [Custom Gun Art](#custom-gun-art)
+    - [Piece Limit Removal](#piece-limit-removal)
     - [`ban` on Weapons and Ranks](#ban-on-weapons-and-ranks)
     - [`ban_modules`](#ban_modules)
   - [Listeners](#listeners)
@@ -64,6 +65,13 @@ These are things JP_API that aren't part of the listener system, but are feature
 
 - If you expand the file `weapons.png` 16 px to the right, you can add custom weapon holding art.
 - The sprite will take the 16 by 16 px area to the right of the weapon's reload art.
+
+#### Piece Limit Removal
+
+- JP_API removes the limit of 10 pieces.
+- As a side effect, it will prevent you from achieving "HOW IT SHOULD BE" or "SHE IS EVERYWHERE" achievements.
+  - This also applies to any other mods or the base game, unless you restart the game.
+- Thanks to Glacies for finding out how to remove the limit!
 
 #### `allow_modules`
 
