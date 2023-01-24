@@ -29,7 +29,7 @@ base = {
 
 
 -- JP_API CODE
-do -- VERSION 2.0
+do -- VERSION 2.1
   MODNAME = current_mod
 
   MODULES = {}
@@ -395,7 +395,7 @@ do -- VERSION 2.0
 
       function LISTENER:dr()
         if not LISTENER.run then return end
-        lprint("JP_API 2.0", 250, 162.5, 2)
+        lprint("JP_API 2.1", 250, 162.5, 2)
         lprint(MODNAME, 5, 162.5, 2)
         for listener in all(LISTENER.listeners["dr"]) do
           listener()
@@ -423,7 +423,7 @@ do -- VERSION 2.0
 
         mode.on_pawn_death = function()
           if on_pawn_death then
-            on_pawn_death(e)
+            on_pawn_death()
           end
           for listener in all(LISTENER.listeners["pawn_death"]) do
             listener()
@@ -441,7 +441,7 @@ do -- VERSION 2.0
 
         mode.on_bishop_death = function()
           if on_bishop_death then
-            on_bishop_death(e)
+            on_bishop_death()
           end
           for listener in all(LISTENER.listeners["bishop_death"]) do
             listener()
@@ -450,7 +450,7 @@ do -- VERSION 2.0
 
         mode.on_rook_death = function()
           if on_rook_death then
-            on_rook_death(e)
+            on_rook_death()
           end
           for listener in all(LISTENER.listeners["rook_death"]) do
             listener()
@@ -459,7 +459,7 @@ do -- VERSION 2.0
 
         mode.on_queen_death = function()
           if on_queen_death then
-            on_queen_death(e)
+            on_queen_death()
           end
           for listener in all(LISTENER.listeners["queen_death"]) do
             listener()
@@ -468,40 +468,12 @@ do -- VERSION 2.0
 
         mode.on_king_death = function()
           if on_king_death then
-            on_king_death(e)
+            on_king_death()
           end
           for listener in all(LISTENER.listeners["king_death"]) do
             listener()
           end
         end
-
-        mode.on_empty = function()
-          if on_empty then
-            on_empty()
-          end
-          for listener in all(LISTENER.listeners["empty"]) do
-            listener()
-          end
-        end
-
-        mode.on_hero_death = function()
-          if on_hero_death then
-            on_hero_death()
-          end
-          for listener in all(LISTENER.listeners["hero_death"]) do
-            listener()
-          end
-        end
-
-        mode.on_boss_death = function()
-          if on_boss_death then
-            on_boss_death()
-          end
-          for listener in all(LISTENER.listeners["boss_death"]) do
-            listener()
-          end
-        end
-
       end
 
       do -- FIX EXHAUST (Glacies)
@@ -550,11 +522,19 @@ do -- VERSION 2.0
 
       do -- CUSTOM GUN ART
         weapons_width, weapons_height = srfsize("weapons")
-        if weapons_width == 160 and mode.weapons then
+        if weapons_width == 160 then
           target("weapons")
-          for i = 0, 15 do
-            for j = 0, 15 do
-              sset(32 + i, j, pget(144 + i, 16 * (mode.weapons_index + 1) + j))
+          if mode.weapons then
+            for i = 0, 15 do
+              for j = 0, 15 do
+                sset(32 + i, j, pget(144 + i, 16 * (mode.weapons_index + 1) + j))
+              end
+            end
+          else
+            for i = 0, 15 do
+              for j = 0, 15 do
+                sset(32 + i, j, pget(144 + i, j))
+              end
             end
           end
           window("Shotgun King")

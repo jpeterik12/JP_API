@@ -52,7 +52,7 @@ weapons = {
 }
 
 -- JP_API CODE
-do -- VERSION 2.0
+do -- VERSION 2.1
   MODNAME = current_mod
 
   MODULES = {}
@@ -418,7 +418,7 @@ do -- VERSION 2.0
 
       function LISTENER:dr()
         if not LISTENER.run then return end
-        lprint("JP_API 2.0", 250, 162.5, 2)
+        lprint("JP_API 2.1", 250, 162.5, 2)
         lprint(MODNAME, 5, 162.5, 2)
         for listener in all(LISTENER.listeners["dr"]) do
           listener()
@@ -497,34 +497,6 @@ do -- VERSION 2.0
             listener()
           end
         end
-
-        mode.on_empty = function()
-          if on_empty then
-            on_empty()
-          end
-          for listener in all(LISTENER.listeners["empty"]) do
-            listener()
-          end
-        end
-
-        mode.on_hero_death = function()
-          if on_hero_death then
-            on_hero_death()
-          end
-          for listener in all(LISTENER.listeners["hero_death"]) do
-            listener()
-          end
-        end
-
-        mode.on_boss_death = function()
-          if on_boss_death then
-            on_boss_death()
-          end
-          for listener in all(LISTENER.listeners["boss_death"]) do
-            listener()
-          end
-        end
-
       end
 
       do -- FIX EXHAUST (Glacies)
