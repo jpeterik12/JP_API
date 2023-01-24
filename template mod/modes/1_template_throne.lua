@@ -1,38 +1,63 @@
-id = "sweep"
+id = "1_template_throne"
 setup = {
   slots_max = { 10, 10 },
 }
 weapons = {
-  { gid = 0, name = "Solomon", chamber_max = 2, firepower = 4, firerange = 3, spread = 55, ammo_max = 6, }, --4
-  { gid = 1, name = "Victoria", chamber_max = 1, firepower = 5, firerange = 4, spread = 45, ammo_max = 3, },
-  { gid = 2, name = "Ramesses II", chamber_max = 2, firepower = 4, firerange = 3, spread = 65, ammo_max = 5,
-    knockback = 50, },
-  { gid = 3, name = "Richard III", chamber_max = 3, firepower = 3, firerange = 3, spread = 75, ammo_max = 8 },
-  { gid = 4, name = "Makeda", chamber_max = 2, firepower = 3, firerange = 3, spread = 50, ammo_max = 6, blade = 2 }
+  { gid = 0, name = "Example 0", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 0" },
+  { gid = 1, name = "Example 1", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 1" },
+  { gid = 2, name = "Example 2", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 2" },
+  { gid = 3, name = "Example 3", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 3" },
+  { gid = 4, name = "Example 4", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 4" },
+  { gid = 5, name = "Example 5", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 5" },
+  { gid = 6, name = "Example 6", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 6" },
+  { gid = 7, name = "Example 7", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 7" },
+  { gid = 8, name = "Example 8", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 8" },
+  { gid = 9, name = "Example 9", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 9" },
+  { gid = 10, name = "Example 10", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 10" },
+  { gid = 11, name = "Example 11", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 11" },
+  { gid = 12, name = "Example 12", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 12" },
+  { gid = 13, name = "Example 13", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 13" },
+  { gid = 14, name = "Example 14", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 14" },
+  { gid = 15, name = "Example 15", chamber_max = 2, firepower = 5, firerange = 5, spread = 50, ammo_max = 4,
+    desc = "Description 15" },
 }
 ranks = {
   { nothing = 1 },
   { gain = { 0, 0 } },
+  { gain = { 3 } },
+  { king_hp = 1 },
   { gain = { 1 } },
-  { king_hp = 1 },
   { spread = 10 },
-  { ammo_max = -1 },
-  { gain = { 2 } },
   { king_hp = 1 },
+  { gain = { 2 } },
   { rook_hp = 1 },
-  { boss_hprc = 200 },
-  { gain = { 3 }, delay = 10 },
   { knight_hp = 1 },
+  { boss_hprc = 200 },
   { spread = 15 },
   { rook_hp = 1 },
+  { ammo_max = -1 },
   { all_hp = 1, ammo_max = 2 },
 }
 base = {
-  promotion = 1, surrender = 1, sweep = 1, blade = 10,
-  gain = { 3, 0, 0, 0, 1, 5, 2, 0 },
-
+  promotion = 1, surrender = 1,
+  gain = { 0, 0, 0, 1, 5, 2, 0 }
 }
-allow_modules = { "sweep" }
+
 
 -- JP_API CODE
 do -- VERSION 2.0

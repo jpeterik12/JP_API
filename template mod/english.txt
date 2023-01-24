@@ -1,0 +1,11 @@
+
+-- MENU
+1_template_throne::template throne
+1_template_throne_desc::copy of throne but with JP API embedded
+2_template_endless::template endless
+2_template_endless_desc::copy of endless but with JP API embedded
+3_template_chase::template chase
+3_template_chase_desc::copy of chase but with JP API embedded
+
+credits::modder: JP_12
+

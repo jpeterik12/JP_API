@@ -1,24 +1,28 @@
 # API
 
 - Contents:
-  - [Gun Descriptions](#gun-descriptions)
-  - [Card Art Limit Removal](#card-art-limit-removal)
-  - [Card Exhaustion Fix](#card-exhaustion-fix)
-  - [`ban` on Weapons and Ranks](#ban-on-weapons-and-ranks)
-  - [`add_listener()`](#add_listener-event-function)
-  - [`remove_listener()`](#remove_listener-event-function)
+  - [Fixes and Features](#fixes-and-features)
+    - [Card Art Limit Removal](#card-art-limit-removal)
+    - [Card Exhaustion Fix](#card-exhaustion-fix)
+    - [Gun Descriptions](#gun-and-rank-descriptions)
+    - [`ban` on Weapons and Ranks](#ban-on-weapons-and-ranks)
+    - [`ban_modules`](#ban_modules)
+  - [Listeners](#listeners)
+    - [`add_listener()`](#add_listener-event-function)
+    - [`remove_listener()`](#remove_listener-event-function)
+  
   - [`new_special()`](#new_special-name-function)
-  - [`_logv()`](#_logv-to_log-title)
-  - [`_logs()`](#_logs-to_search-value)
+  - [Debug Tools](#debug)
+    - [`_logv()`](#_logv-to_log-title)
+    - [`_logs()`](#_logs-to_search-value)
   
 &#8202;
 
-#### Gun Descriptions
+## Fixes and Features
 
-- Add `desc = "<Description>"` to any weapon to add a description to it.
-- The description will be displayed in the weapon select menu as a hoverable `?`.
+These are things JP_API that aren't part of the listener system, but are features that are useful
 
-&#8202;
+### Fixes
 
 #### Card Art Limit Removal
 
@@ -37,6 +41,8 @@
 
 &#8202;
 
+### New Features
+
 #### `ban` on Weapons and Ranks
 
 - Allows you to ban cards with specific weapons or ranks.
@@ -46,12 +52,39 @@
 
 &#8202;
 
+#### Gun and Rank Descriptions
+
+- Add `desc = "<Description>"` to any weapon or rank to add a description to it.
+- The description will be displayed in the weapon/rank select menu as a hoverable `?`.
+
+&#8202;
+
+#### `allow_modules`
+
+- Allows you to select specific modules to be loaded based on gamemode
+- To add a module, just add `allow_modules = {"<module>"}` in the same place you would but `ban={...}` for the mode
+- Note: This does not work on weapons or cards
+- By default, All modules are loaded
+
+#### `ban_modules`
+
+- Allows you to ban specific modules from loading based on gamemode
+- To ban a module, just add `ban_modules = {"<module>"}` in the same place you would but `ban={...}` for the mode
+- Note: This does not work on weapons or cards
+- By default, All modules are loaded
+
+&#8202;
+
+### Listeners
+
+The following functions are used for interacting with the listener system of JP_API
+
 #### `add_listener (event, function)`
 
 - Attaches `function` to the `event`. Any arguements are passed to `function`.
 - `event` must be a string.
 - `function` must be a function.
-- [List of `event`s](#events)
+- [List of `event`s](events)
 
 &#8202;
 
@@ -61,7 +94,7 @@
 - Must be the same function that was passed to `add_listener`.
 - `event` must be a string.
 - `function` must be a function.
-- [List of `event`s](#events)
+- [List of `event`s](events)
 
 &#8202;
 
@@ -74,9 +107,14 @@
 
 &#8202;
 
+### Debug
+
+These functions are useful for debugging / or developing.
+Logs are found in log.txt in the game directory.
+
 #### `_logv (to_log[, title])`
 
-- Verbosely logs `to_log` to the console. (depth of 4)
+- Logs `to_log` to the log file. Table values are fully logged, with a max depth of 4.  
 - `title` must be a string
 - If `title` is passed, it will be used as the title of the log.
 
@@ -84,98 +122,9 @@
 
 #### `_logs (to_search, value)`
 
-- Searches `to_search` for `value` and logs any paths that are equal to the console.
+- Searches `to_search` for `value` and logs any paths that are equal to the log file.
 - Useful for finding the path to a specific value, or places where an entity is referenced.
 - `to_search` must be a table.
 - `value` can be any type.
 
 &#8202;
-
-## Events
-
-- Actions
-  - [`shot`](#shot)
-  - [`move`](#move)
-  - [`blade`](#blade)
-  - [`special`](#special)
-- Bullets
-  - [`bullet_init`](#bullet_init)
-  - [`bullet_upd`](#bullet_upd)
-- Grenades
-  - [`grenade_init`](#grenade_init)
-  - [`grenade_upd`](#grenade_upd)
-  - [`grenade_bouce`](#grenade_bouce)
-  - [`grenade_land`](#grenade_land)
-  - [`grenade_explode`](#grenade_explode)
-- Generic
-  - [`after_white`](#after_white)
-  - [`after_black`](#after_black)
-  - [`bad_death`](#bad_death)
-  - [`upd`](#upd)
-  - [`dr`](#dr)
-
-&#8202;
-
-#### `shot`
-
-- Event fires after the player shoots. All bullets exist, and have not moved.
-
-#### `move`
-
-- Event fires after the player moves. The player is still moving when called.
-
-#### `blade`
-
-- Event fires after the player uses their blade. The piece is already killed.
-
-#### `special`
-
-- Event fires after the player uses a special. Objects exist (grenades) or other effects are set.
-
-#### `bullet_init`
-
-- Event fires for each bullet when it is spawned. Has the bullet passed in as a paramater.
-
-#### `bullet_upd`
-
-- Event fires for each bullet each update. Has the bullet passed in as a paramater.
-
-#### `grenade_init`
-
-- Event fires for each grenade when it is spawned. Has the grenade passed in as a paramater.
-
-#### `grenade_upd`
-
-- Event fires for each grenade each update. Has the grenade passed in as a paramater.
-
-#### `grenade_bouce`
-
-- Event fires for each grenade when it bounces. Has the grenade passed in as a paramater.
-
-#### `grenade_land`
-
-- Event fires for each grenade when it lands. Has the grenade passed in as a paramater.
-
-#### `grenade_explode`
-
-- Event fires for each grenade when it explodes. Has the grenade passed in as a paramater.
-
-#### `after_white`
-
-- Event fires after all white pieces are done moving
-
-#### `after_black`
-
-- Event first after the black piece moves/shoots/reloads
-
-#### `bad_death`
-
-- Event fires when a piece dies. Has the piece passed in as a paramater.
-
-#### `upd`
-
-- Fires once per update
-
-#### `dr`
-
-- Fires once per screen draw

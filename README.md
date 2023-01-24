@@ -24,7 +24,9 @@ As a note, doing this will require knowledge in both lua and SGK's base function
 
 ## Usage
 
-Custom Code should be written in the section labeled `MOD CODE`, as distinct modules that are a single function. Then add that function to the `mod_setup` function.
+In the folder `modules` in your mod (create it if it does not exist), create a file for your code.
+In that file, create a function named `start()`.
+In that function, write your code!
 
 ## Updating
 
@@ -36,32 +38,20 @@ Here is an example that simply logs each time a few event occurs
 
 ```lua
 ...
--- MOD CODE
-do
-  function mod_setup()
-    init_listeners()
-    enable_logger()
-  end
+-- logging.lua
+function start()
+  add_listener("shot", function() 
+    _log("PLAYER SHOT")
+  end)
 
-  function logger()
-    add_listener("shot", function() 
-      _log("PLAYER SHOT")
-    end)
-    
-    add_listener("bullet_init", function(bullet) 
-      _log("BULLET SPAWNED")
-    end)
-    
-    add_listener("after_black", function() 
-      _log("BLACK MOVE")
-    end)
+  add_listener("after_black", function() 
+    _log("BLACK MOVE")
+  end)
 
-    add_listener("after_white", function() 
-      _log("WHITE MOVE")
-    end)
-  end
+  add_listener("after_white", function() 
+    _log("WHITE MOVE")
+  end)
 end
--- MOD CODE END
 ...
 ```
 

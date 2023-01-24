@@ -1,38 +1,49 @@
-id = "sweep"
+id = "1_goofy_throne"
 setup = {
   slots_max = { 10, 10 },
 }
 weapons = {
-  { gid = 0, name = "Solomon", chamber_max = 2, firepower = 4, firerange = 3, spread = 55, ammo_max = 6, }, --4
-  { gid = 1, name = "Victoria", chamber_max = 1, firepower = 5, firerange = 4, spread = 45, ammo_max = 3, },
-  { gid = 2, name = "Ramesses II", chamber_max = 2, firepower = 4, firerange = 3, spread = 65, ammo_max = 5,
-    knockback = 50, },
-  { gid = 3, name = "Richard III", chamber_max = 3, firepower = 3, firerange = 3, spread = 75, ammo_max = 8 },
-  { gid = 4, name = "Makeda", chamber_max = 2, firepower = 3, firerange = 3, spread = 50, ammo_max = 6, blade = 2 }
+  { gid = 0, name = "Bursting Shotgun", chamber_max = 1, firepower = 4, firerange = 4, spread = 90, ammo_max = 4,
+    airburst = 1.5, desc = "Bullets go perfectly straight before spreading. The point at the end splits the bullet." },
+  { gid = 1, name = "Perfect Barrels", chamber_max = 3, firepower = 4, firerange = 5, spread = 70, ammo_max = 5,
+    fixed_angle = 1, desc = "Bullets are spread evenly across fire arc. Less a shotgun and more 4 rifles taped together." },
+  { gid = 2, name = "Acceleration Cannon", chamber_max = 1, firepower = 2, firerange = 10, spread = 50, ammo_max = 4,
+    strengthening = 1, desc = "Bullets do more damage the longer they exist. Go for those snipes." },
+  { gid = 3, name = "Deceleration Cannon", chamber_max = 2, firepower = 2, firerange = 10, spread = 50, ammo_max = 4,
+    weakening = 1, desc = "Bullets do less damage the longer they exist. Get in their face." },
+  { gid = 4, name = "Single Use Shotgun", chamber_max = 1, firepower = 1, firerange = 10, spread = 0, ammo_max = 0,
+    one_shot = 1, desc = "No spare bullets. One shot, one kill. Get the angle, take the shot." },
+  { gid = 5, name = "Long Shotgun", chamber_max = 2, firepower = 4, firerange = 4, spread = 50, ammo_max = 5,
+    long_gun = 1, desc = "You can't hit pieces within one tile. This must be why people often make sawn-offs." },
+  { gid = 6, name = "Heat Seeking Shotgun", chamber_max = 1, firepower = 4, firerange = 5, spread = 180, ammo_max = 4,
+    homing = 1, desc = "Homing Bullets. Science still doesn't understand." },
+  { gid = 7, name = "Curved Shotgun", chamber_max = 2, firepower = 4, firerange = 4, spread = 80, ammo_max = 5,
+    curve = 1, desc = "The bullets will start to curve once leaving your barrel. Maybe check the alignment?" },
+  { gid = 8, name = "Bouncing Shotgun", chamber_max = 1, firepower = 5, firerange = 5, spread = 30, ammo_max = 4,
+    bounce = 1, desc = "BUllets will bounce off the edge of the board. Time for some trickshots." },
 }
 ranks = {
   { nothing = 1 },
   { gain = { 0, 0 } },
+  { gain = { 3 } },
+  { king_hp = 1 },
   { gain = { 1 } },
-  { king_hp = 1 },
   { spread = 10 },
-  { ammo_max = -1 },
-  { gain = { 2 } },
   { king_hp = 1 },
+  { gain = { 2 } },
   { rook_hp = 1 },
-  { boss_hprc = 200 },
-  { gain = { 3 }, delay = 10 },
   { knight_hp = 1 },
+  { boss_hprc = 200 },
   { spread = 15 },
   { rook_hp = 1 },
+  { ammo_max = -1 },
   { all_hp = 1, ammo_max = 2 },
 }
 base = {
-  promotion = 1, surrender = 1, sweep = 1, blade = 10,
-  gain = { 3, 0, 0, 0, 1, 5, 2, 0 },
-
+  promotion = 1, surrender = 1,
+  gain = { 0, 0, 0, 1, 5, 2, 0 }
 }
-allow_modules = { "sweep" }
+
 
 -- JP_API CODE
 do -- VERSION 2.0

@@ -1,5 +1,5 @@
--- GAMEPLAY
 CARDS = {
+	-- BLACK CARDS
 	{ gid = 0, n = 3, id = "Ermine Belt", ammo_max = 3 },
 	{ gid = 1, n = 2, id = "Rightful Curtsy", ammo_max = 1, knockback = 50 },
 	{ gid = 2, n = 1, id = "Elite Gem", firerange = 1, ammo_regen = 1 },
@@ -27,15 +27,12 @@ CARDS = {
 	{ gid = 23, n = 3, id = "Kingly Alms", grenades_max = 2, special = "grenade" },
 	{ gid = 24, n = 1, id = "Subtle Poison", pwe = 2, queen_hp = -1, leader_hp = -1, queen_poison = 15 },
 	{ gid = 26, n = 2, id = "Small Fry Harvest", pwe = 2, ammo_max = 1, pawn_shell = 1 },
-	{ gid = 27, n = 2, id = "A Piercing Truth", pierce = 30 }, --firepower=-1
+	{ gid = 27, n = 2, id = "A Piercing Truth", pierce = 30 },
 	{ gid = 28, n = 2, id = "Black Mist", mist = 1, firerange = -1 },
 	{ gid = 29, n = 1, id = "King's Shoulders", pwe = 2, grab = 1 },
 	{ gid = 30, n = 2, id = "High Focus", spread = -18, firepower = 1, flip_on = "contact" },
 	{ gid = 31, n = 1, id = "Courteous Jousting", need = 1, knight_joust = 1, spread = -10 },
 	{ gid = 32, n = 1, id = "Cornered Despot", firepower = 2, flip_on = "inner" },
-
-
-	-- NEW CARDS
 	{ gid = 33, n = 1, id = "Sawed-off Justice", firepower = 2, firerange = -1, recoil = 1 },
 	{ gid = 34, n = 1, id = "Welcome Gift", firepower = 4, flip_on = "first-reload" },
 	{ gid = 35, n = 1, id = "Cannon Fodder", pawnreap = 1 },
@@ -43,7 +40,7 @@ CARDS = {
 	{ gid = 37, n = 1, id = "Philanthropy", need_grenade = 1, grenades_max = 1, freegren = 1 },
 	{ gid = 38, n = 3, id = "Imperial Shot Put", cannonball = 1, ammo_max = -1, need_card = "King's Shoulders" },
 	{ gid = 39, n = 1, id = "Egotic Maelstrom", delay = 10, cycle = 1, delayed = { firepower = 1 } },
-	{ gid = 40, n = 1, id = "Church Organ", ammo_max = 2, chamber_max = 2, manual_reload = 1, need_card = "Cathedral" },
+	{ gid = 40, n = 1, id = "Church Organ", ammo_max = 2, chamber_max = 2, need_card = "Cathedral" },
 	{ gid = 41, n = 1, id = "Black Plague", plague = 1, firerange = -1, need_card = { "Crow's Blessing", "Ravenous Rats" } },
 	{ gid = 42, n = 1, id = "Ravenous Rats", rats = 1 },
 	{ gid = 43, n = 1, id = "Deep Water", deepwater = 1, need_card = "The Moat" },
@@ -53,21 +50,14 @@ CARDS = {
 	{ gid = 47, n = 1, id = "Nightbane", blade = 3 },
 	{ gid = 48, n = 1, id = "Bushido", blade = 2, bushido = 1, firepower = -1 },
 	{ gid = 49, n = 1, id = "Bloodless Coups", pawn_peace = 1, pawn_curse = 1 },
-
-	-- POST BETA CARDS
 	{ gid = 50, n = 1, id = "Wand of Hypnosis", wand = { 5 } },
 	{ gid = 51, n = 1, id = "Presbyopia", queen_minr = 2, bishop_minr = 2, need_card = "Golden Aging" },
 	{ gid = 52, n = 1, id = "Golden Aging", need = { 4, 8 }, delay = 10, cycle = 1, delayed = { queen_tempo = 1,
-		leader_tempo = 1 } },
+		leader_tempo = 1 }, leader_hp = -1, queen_hp = -1 },
 	{ gid = 53, n = 1, id = "Fool Companion", need = 8, jester_guard = 1, need_card = "The Jester" },
 	{ gid = 54, n = 1, id = "Force-feeding", overload = 1, ammo_max = 1 },
 
-
-	--
-
-
-
-	--
+	-- WHITE CARDS
 	{ gid = 60, id = "Backups", gain = { 0, 0, 0 }, n = 3 },
 	{ gid = 61, id = "Cavalry", delay = 15, gain = { 1, 1 } },
 	{ gid = 62, id = "Conclave", delay = 15, gain = { 2, 2 } },
@@ -92,7 +82,8 @@ CARDS = {
 	{ gid = 81, id = "Castle", need = { 3, 8 }, rook_castle = 1, rook_hp = 1 },
 	{ gid = 82, id = "Conscription", n = 2, gain = 0, delay = 5, cycle = 1 },
 	{ gid = 83, id = "Theocracy", sac = 5, gain = 2, need = 2, bishop_hp = 2, theocracy = 1, },
-	{ gid = 85, id = "Iron Maiden", need = 4, queen_iron = 1, queen_tempo = 2 },
+	{ gid = 85, id = "Iron Maiden", need = 4, queen_iron = 1, queen_tempo = 2, flipped_on = "only_queen"
+	},
 	{ gid = 86, id = "Court of the King", n = 2, gain = { 1, 1, 2, 3 }, all_tempo = 1 },
 	{ gid = 87, id = "The Red Book", gain = 2, bishop_orth = 1 },
 	{ gid = 88, id = "Saboteur", n = 2, sac = { 0, 0 }, gain = 2, bad_shells = 1 },
@@ -104,7 +95,7 @@ CARDS = {
 
 	-- NEW
 	{ gid = 94, id = "Karma", sqb_spread = 30, sqw_firepower = -1 },
-	{ gid = 95, id = "Undead Armies", knight_rep = 0, rook_rep = 0, bishop_rep = 0 },
+	{ gid = 95, id = "Undead Armies", knight_rep = 0, rook_rep = 0, bishop_rep = 0, pawn_hp = -1 },
 	{ gid = 96, id = "Shortage", sac = 0, ammo_max = -3, grenades_max = -1 },
 	{ gid = 97, id = "Succubus", gain = 4, soul_slot = 1 },
 	{ gid = 98, id = "Bunker", need = { 0, 0, 0 }, sac = 3, need_grenade = 1, pawn_hp = 1, king_hp = 1, grenade_dmg = -1 },
@@ -119,8 +110,6 @@ CARDS = {
 	{ gid = 107, id = "Full Plate Armor", blade = -1, all_hp = 1, all_tempo = 1 },
 	{ gid = 108, id = "Military Academy", delay = 10, gain = 1, cycle = 1 },
 	{ gid = 109, id = "Witch's Curse", need = 4, firepower = -1, firerange = -1, spread = 10, queen_curse = 1 },
-
-	--- POST BETA CARDS
 	{ gid = 110, id = "Saddle", knight_carry = 1, knight_tempo = 1, need_card = "Cavalry" }, --
 	{ gid = 111, id = "The Jester", need = 0, gain = 0, jester = 1, need_card = "Throne Room" }, --
 	{ gid = 112, id = "Guillotine", sac = 5, need_card = "Revolution" }, --
@@ -133,7 +122,6 @@ EXCLUDE = {
 	{ "Royal Loafers", "Unjust Decree", "Kingly Alms", "Engraved Scope" },
 	{ "Royal Loafers", "Sawed-off Justice" },
 	{ "Militia", "Bloodless Coups" },
-	{ "Guillotine", "Iron Maiden" },
 	{ "Guillotine", "The Secret Heir" },
 }
 
@@ -149,5 +137,3 @@ PIECES = {
 	{ type = 8, name = "leader", },
 	{ type = 9, name = "canonball", hp = 99, tempo = 4, seek = "wdist", inert = true },
 }
-
-WHAT = 367

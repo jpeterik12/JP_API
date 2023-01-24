@@ -1,11 +1,11 @@
 
 -- MENU
-agoofythrone::goofy guns
-agoofythrone_desc::these guns are a bit silly and goofy
-bgoofyendless::endlessly goofy
-bgoofyendless_desc::these guns are endlessly silly and goofy
-cgoofychase::chase the goof
-cgoofychase_desc::these guns are chasing after silliness and goofiness
+1_goofy_throne::goofy guns
+1_goofy_throne_desc::these guns are a bit silly and goofy
+2_goofy_endless::endlessly goofy
+2_goofy_endless_desc::these guns are endlessly silly and goofy
+3_goofy_chase::chase the goof
+3_goofy_chase_desc::these guns are chasing after silliness and goofiness
 
 credits::modder: JP_12
 
