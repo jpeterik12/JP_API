@@ -437,7 +437,7 @@ do -- VERSION 2.0
 
         mode.on_pawn_death = function()
           if on_pawn_death then
-            on_pawn_death(e)
+            on_pawn_death()
           end
           for listener in all(LISTENER.listeners["pawn_death"]) do
             listener()
@@ -455,7 +455,7 @@ do -- VERSION 2.0
 
         mode.on_bishop_death = function()
           if on_bishop_death then
-            on_bishop_death(e)
+            on_bishop_death()
           end
           for listener in all(LISTENER.listeners["bishop_death"]) do
             listener()
@@ -464,7 +464,7 @@ do -- VERSION 2.0
 
         mode.on_rook_death = function()
           if on_rook_death then
-            on_rook_death(e)
+            on_rook_death()
           end
           for listener in all(LISTENER.listeners["rook_death"]) do
             listener()
@@ -473,7 +473,7 @@ do -- VERSION 2.0
 
         mode.on_queen_death = function()
           if on_queen_death then
-            on_queen_death(e)
+            on_queen_death()
           end
           for listener in all(LISTENER.listeners["queen_death"]) do
             listener()
@@ -482,7 +482,7 @@ do -- VERSION 2.0
 
         mode.on_king_death = function()
           if on_king_death then
-            on_king_death(e)
+            on_king_death()
           end
           for listener in all(LISTENER.listeners["king_death"]) do
             listener()
@@ -564,11 +564,19 @@ do -- VERSION 2.0
 
       do -- CUSTOM GUN ART
         weapons_width, weapons_height = srfsize("weapons")
-        if weapons_width == 160 and mode.weapons then
+        if weapons_width == 160 then
           target("weapons")
-          for i = 0, 15 do
-            for j = 0, 15 do
-              sset(32 + i, j, pget(144 + i, 16 * (mode.weapons_index + 1) + j))
+          if mode.weapons then
+            for i = 0, 15 do
+              for j = 0, 15 do
+                sset(32 + i, j, pget(144 + i, 16 * (mode.weapons_index + 1) + j))
+              end
+            end
+          else
+            for i = 0, 15 do
+              for j = 0, 15 do
+                sset(32 + i, j, pget(144 + i, j))
+              end
             end
           end
           window("Shotgun King")

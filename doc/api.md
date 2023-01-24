@@ -5,6 +5,7 @@
     - [Card Art Limit Removal](#card-art-limit-removal)
     - [Card Exhaustion Fix](#card-exhaustion-fix)
     - [Gun Descriptions](#gun-and-rank-descriptions)
+    - [Custom Gun Art](#custom-gun-art)
     - [`ban` on Weapons and Ranks](#ban-on-weapons-and-ranks)
     - [`ban_modules`](#ban_modules)
   - [Listeners](#listeners)
@@ -58,6 +59,11 @@ These are things JP_API that aren't part of the listener system, but are feature
 - The description will be displayed in the weapon/rank select menu as a hoverable `?`.
 
 &#8202;
+
+#### Custom Gun Art
+
+- If you expand the file `weapons.png` 16 px to the right, you can add custom weapon holding art.
+- The sprite will take the 16 by 16 px area to the right of the weapon's reload art.
 
 #### `allow_modules`
 
