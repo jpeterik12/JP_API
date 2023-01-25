@@ -1,3 +1,4 @@
+id = "strengthening"
 function start()
   add_listener("bullet_init", function(b)
     if not b.shot then return end

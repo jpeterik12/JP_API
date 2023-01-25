@@ -1,3 +1,4 @@
+id = "hook"
 function start()
   --[[
 		  Relavant Card Effects:

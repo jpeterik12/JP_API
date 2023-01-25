@@ -1,3 +1,4 @@
+id = "example"
 function initialize()
   _log("EXAMPLE: mode initialize")
 end

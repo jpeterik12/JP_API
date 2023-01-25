@@ -1,3 +1,4 @@
+id = "one_shot"
 -- ONE SHOT ONE KILL
 function start()
   add_listener("bullet_init", function()

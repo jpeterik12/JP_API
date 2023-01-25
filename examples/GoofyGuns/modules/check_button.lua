@@ -1,3 +1,4 @@
+id = "check_button"
 function start()
   local show_attacked = false
   mk_text_but(220, 0, 20, "SAFE", function() show_attacked = not show_attacked end).ents[1].button = false

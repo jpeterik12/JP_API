@@ -1,3 +1,4 @@
+id = "aura"
 function start()
   add_listener("dr", function()
     lprint(lang.credits, 181, 158, 6)

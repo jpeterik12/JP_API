@@ -1,3 +1,4 @@
+id = "fixed_angle"
 function start()
   add_listener("shot", function()
     if not stack.fixed_angle then return end
