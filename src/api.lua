@@ -5,7 +5,7 @@ do -- VERSION 2.1
   MODULES = {}
   foreach(ls("mods/" .. MODNAME .. "/modules/"), function(module_name)
     if module_name:sub(-4) ~= ".lua" then return end
-    module = table_from_file("mods/" .. MODNAME .. "/modules/" .. sub(module_name, 1, #module_name - 4))
+    module = table_from_file("mods/" .. MODNAME .. "/modules/" .. module_name:sub(1, -5))
     if ban_modules and tbl_index(module.id, ban_modules) > 0 then return end
     if allow_modules and tbl_index(module.id, ban_modules) < 0 then return end
     add(MODULES, module)
@@ -21,11 +21,7 @@ do -- VERSION 2.1
       end
       local function data_tostring_recursive(data, depth, parent)
         local function indent(n)
-          local str = ""
-          for i = 0, n do
-            str = str .. "  "
-          end
-          return str
+          return rep("  ", n)
         end
 
         if data == nil then
@@ -521,9 +517,9 @@ do -- VERSION 2.1
             setfenv(v, getfenv(1))
             add_listener("after_white", v)
           end
-          if sub(k, 1, 3) == "on_" and LISTENER.listeners[sub(k, 4)] then
+          if k:sub(1, 3) == "on_" and LISTENER.listeners[k:sub(4)] then
             setfenv(v, getfenv(1))
-            add_listener(sub(k, 4), v)
+            add_listener(k:sub(4), v)
           end
         end
       end
