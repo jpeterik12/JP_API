@@ -6,6 +6,7 @@
     - [Card Exhaustion Fix](#card-exhaustion-fix)
     - [Gun Descriptions](#gun-and-rank-descriptions)
     - [Custom Gun Art](#custom-gun-art)
+    - [Gun GID Fix](#gun-gid-fix)
     - [Piece Limit Removal](#piece-limit-removal)
     - [`ban` on Weapons and Ranks](#ban-on-weapons-and-ranks)
     - [`ban_modules`](#ban_modules)
@@ -65,6 +66,11 @@ These are things JP_API that aren't part of the listener system, but are feature
 
 - If you expand the file `weapons.png` 16 px to the right, you can add custom weapon holding art.
 - The sprite will take the 16 by 16 px area to the right of the weapon's reload art.
+
+#### Gun GID Fix
+
+- The gid of a weapon is now used to set the image that is displayed in the weapon select menu.
+- This means that you can now have multiple weapons with the same texture, remove certain weapons from modes, or rearrage weapons.
 
 #### Piece Limit Removal
 

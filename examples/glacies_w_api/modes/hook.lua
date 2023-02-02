@@ -35,7 +35,7 @@ base = {
 allow_modules = { "hook" }
 
 -- JP_API CODE
-do -- VERSION 2.1
+do -- VERSION 2.2
   MODNAME = current_mod
 
   MODULES = {}
@@ -57,7 +57,8 @@ do -- VERSION 2.1
       end
       local function data_tostring_recursive(data, depth, parent)
         local function indent(n)
-          return rep("  ", n)
+          local s = "  "
+          return s:rep(n + 1)
         end
 
         if data == nil then
@@ -397,7 +398,7 @@ do -- VERSION 2.1
 
       function LISTENER:dr()
         if not LISTENER.run then return end
-        lprint("JP_API 2.1", 250, 162.5, 2)
+        lprint("JP_API 2.2", 250, 162.5, 2)
         lprint(MODNAME, 5, 162.5, 2)
         for listener in all(LISTENER.listeners["dr"]) do
           listener()
@@ -539,7 +540,6 @@ do -- VERSION 2.1
               end
             end
           end
-          window("Shotgun King")
         end
       end
 
@@ -578,6 +578,31 @@ do -- VERSION 2.1
       LISTENER.specials[name] = special
     end
   end
+  local function do_swapping()
+    target("weapons")
+    local weapons_img = {}
+    local weapons_width, weapons_height = srfsize("weapons")
+    for p = 1, weapons_width * weapons_height do
+      weapons_img[p] = pget(p % weapons_width, flr(p / weapons_width))
+    end
+
+    for k, weapon in pairs(weapons) do
+      if k ~= (weapon.gid + 1) then
+        y_offset = 24 * ((weapon.gid + 1) - k)
+        for x = 0, 95 do
+          for y = (24 * (k - 1)), (24 * (k)) - 1 do
+            pset(x, y, weapons_img[x + (y + y_offset) * weapons_width])
+          end
+        end
+        y_offset = 16 * ((weapon.gid + 1) - k)
+        for x = 96, 160 do
+          for y = (16 * k), (24 * (k + 1)) - 1 do
+            pset(x, y, weapons_img[x + (y + y_offset) * weapons_width])
+          end
+        end
+      end
+    end
+  end
 
   function initialize()
     palette("mods\\" .. MODNAME .. "\\gfx.png") -- USE CUSTOM PALLETE
@@ -586,7 +611,10 @@ do -- VERSION 2.1
     load_mod(MODNAME)
 
     if mode.ranks then mode.ranks_index = mid(0, bget(0, 4), #ranks - 1) end -- FIX RANK CRASH
-    if mode.weapons then mode.weapons_index = mid(0, bget(1, 4), #weapons - 1) end -- FIX WEAPONS CRASH
+    if mode.weapons then
+      mode.weapons_index = mid(0, bget(1, 4), #weapons - 1) -- FIX WEAPONS CRASH
+      do_swapping()
+    end
 
     for module in all(MODULES) do -- LOAD MODULES
       if module.initialize then
