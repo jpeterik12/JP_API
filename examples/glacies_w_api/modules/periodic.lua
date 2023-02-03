@@ -1,8 +1,8 @@
 id = "periodic_promotion" -- BY GLACIES
 --[[
-		Relavant Card Effects:
+		Relevant Card Effects:
 
-		promoting = <int>			Promotes a random DEFAULT PIECE every <int> turns
+		promoting_<id> = <int>		Promotes a random piece of type <id> every <int> turns
 	--]]
 function on_new_turn()
   for i = 0, #PIECES - 1 do

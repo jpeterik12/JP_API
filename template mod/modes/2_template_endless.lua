@@ -685,82 +685,76 @@ do -- VERSION 2.3
 
   -- GUN DESCRIPTIONS
   function enable_description()
+    local function gety(id)
+      local y = -100
+      for ent in all(ents) do
+        if ent.id == id then
+          y = ent.y
+        end
+      end
+      return y
+    end
+
+    local gunhint, rankhint
+
     local function spawn_gun_description()
-      local hinty = 67
-      if not mode.ranks then hinty = 40 end
-      local x = {}
+      if gunhint then
+        del(ents, gunhint)
+      end
       if weapons[mode.weapons_index + 1].desc then
-        x = mk_hint_but(280, hinty - 3, 8, 9, weapons[mode.weapons_index + 1].desc, { 4 }, 100, nil,
-          { x = 170, y = hinty + 8 })
-        x.button = false
+        hinty = gety("weapons")
+        x = mk_hint_but(283, hinty - 1, 5, 9, weapons[mode.weapons_index + 1].desc, { 4 }, 100, nil,
+          { x = 170, y = hinty + 5 })
       else
         x = mke()
       end
       x.lastindex = mode.weapons_index
-      x.dr = function(self)
-        if (not mode.weapons_index) then
-          del(ents, self)
-          return
-        end
+      function x:dr()
         if weapons[mode.weapons_index + 1].desc then
-          local printy = -10
-          for ent in all(ents) do
-            if ent.id == "weapons" then
-              printy = ent.y + 1
-            end
-          end
+          local printy = gety("weapons") + 1
           lprint("?", 284, printy, 5)
         end
         if (mode.weapons_index ~= self.lastindex) then
           del(ents, self)
           spawn_gun_description()
+          return
         end
       end
     end
 
     local function spawn_rank_description()
-      local hinty = 14
-      if not mode.weapons then hinty = 45 end
-      local x = {}
+      if rankhint then
+        del(ents, rankhint)
+      end
       if ranks[mode.ranks_index + 1].desc then
-        x = mk_hint_but(278, hinty - 3, 8, 9, ranks[mode.ranks_index + 1].desc, { 4 }, 100, nil,
-          { x = 170, y = hinty + 8 })
-        x.button = false
+        hinty = gety("ranks")
+        x = mk_hint_but(279, hinty - 1, 5, 9, ranks[mode.ranks_index + 1].desc, { 4 }, 100, nil,
+          { x = 170, y = hinty + 5 })
       else
         x = mke()
       end
       x.lastindex = mode.ranks_index
-      x.dr = function(self)
-        if (not mode.ranks_index) then
-          del(ents, self)
-          return
-        end
+      function x:dr()
         if ranks[mode.ranks_index + 1].desc then
-          local printy = -10
-          for ent in all(ents) do
-            if ent.id == "ranks" then
-              printy = ent.y + 1
-            end
-          end
-          if printy == -10 then
-            del(ents, self)
-            return
-          end
+          local printy = gety("ranks") + 1
           lprint("?", 280, printy, 5)
         end
         if (mode.ranks_index ~= self.lastindex) then
           del(ents, self)
           spawn_rank_description()
+          return
         end
       end
     end
 
     if mode.weapons then
       spawn_gun_description()
+      wait(40, spawn_gun_description)
     end
 
     if mode.ranks then
       spawn_rank_description()
+      wait(40, spawn_rank_description)
     end
   end
 
