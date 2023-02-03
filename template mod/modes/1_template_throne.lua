@@ -559,12 +559,20 @@ do -- VERSION 2.2
         if not mode.ban then mode.ban = {} end
         if mode.weapons and mode.weapons[mode.weapons_index + 1].ban then
           for ca in all(mode.weapons[mode.weapons_index + 1].ban) do
-            add(mode.ban, ca)
+            for acard in all(cards.pool) do
+              if acard.id == ca then
+                del(cards.pool, acard)
+              end
+            end
           end
         end
         if mode.ranks and mode.ranks[mode.ranks_index + 1].ban then
           for ca in all(mode.ranks[mode.ranks_index + 1].ban) do
-            add(mode.ban, ca)
+            for acard in all(cards.pool) do
+              if acard.id == ca then
+                del(cards.pool, acard)
+              end
+            end
           end
         end
       end
