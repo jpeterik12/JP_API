@@ -11,7 +11,7 @@ As a note, doing this will require knowledge in both lua and SGK's base function
 
 ### New Project
 
-1. Copy the [example mod](/example%20mod/) into your mod folder.
+1. Copy the [template mod](/template%20mod/) into your mod folder.
 2. Rename the folder to your mod's name.
 3. Start Using JP_API!
 

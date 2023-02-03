@@ -4,6 +4,8 @@ This is a list of all events you can access using JP_API
 
 ## All Events
 
+### TOC
+
 - Actions
   - [`shot`](#shot)
   - [`move`](#move)
@@ -29,6 +31,8 @@ This is a list of all events you can access using JP_API
 - Generic
   - [`after_white`](#after_white)
   - [`after_black`](#after_black)
+  - [`floor_start`](#floor_start)
+  - [`floor_end`](#floor_end)
   - [`bad_death`](#bad_death)
   - [`upd`](#upd)
   - [`dr`](#dr)
@@ -86,6 +90,14 @@ This is a list of all events you can access using JP_API
 #### `after_black`
 
 - Event first after the black piece moves/shoots/reloads
+
+#### `floor_start`
+
+- Event fires when a new floor is started
+
+#### `floor_end`
+
+- Event fires when a floor is ended
 
 #### `bad_death`
 
