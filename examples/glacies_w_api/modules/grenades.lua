@@ -43,6 +43,13 @@ function on_new_turn()
 end
 
 function start()
+  -- display setup
+  burn_gfx = true -- enables gfx for burning squares
+  start_gid = 352 -- the index of the 16*16 square for the first frame of animation
+  animation_length = 64 -- number of frames in one cycle of animation
+  piece_explosion_sfx = true -- enables sfx for piece death explosions
+  piece_explosion_delay = 12 -- the delay between piece death and their explosions
+
   add_listener("grenade_init", function(ent)
     -- gameplay setup
     frag_min_range = 3 -- default minimum range of fragments (unit: squares)
@@ -54,48 +61,6 @@ function start()
     -- When a burning square is ignited again, if BSS is:
     -- Positive: duration of burning stacks
     -- Else: duration of burning is set to the largest
-    explode_range = { -- the range of explosion when these pieces die
-      pawn = 1,
-      knight = 1,
-      bishop = 1,
-      rook = 1,
-      queen = 1,
-      king = 1,
-      boss = 1,
-      canonball = 1
-    }
-    immune = { -- pieces that don't get:
-      stun = { -- stunned
-        -- pawn = false,
-        -- knight = false,
-        -- bishop = false,
-        -- rook = false,
-        -- queen = false,
-        -- king = false,
-        -- boss = false,
-        -- canonball = false,
-        -- leader = false
-      },
-      frost = { -- delayed
-        -- same as above
-      },
-      burn = { -- burned
-        -- same as above
-      },
-      pierc = { -- damaged through iron armour
-        -- same as above
-      },
-      expl = { -- damaged by other pieces' explosion
-        -- same as above
-      },
-    }
-
-    -- display setup
-    burn_gfx = true -- enables gfx for burning squares
-    start_gid = 352 -- the index of the 16*16 square for the first frame of animation
-    animation_length = 64 -- number of frames in one cycle of animation
-    piece_explosion_sfx = true -- enables sfx for piece death explosions
-    piece_explosion_delay = 12 -- the delay between piece death and their explosions
 
 
     function ignite(sq, dura)
@@ -211,6 +176,41 @@ function start()
 end
 
 function on_bad_death(p)
+  explode_range = { -- the range of explosion when these pieces die
+    pawn = 1,
+    knight = 1,
+    bishop = 1,
+    rook = 1,
+    queen = 1,
+    king = 1,
+    boss = 1,
+    canonball = 1
+  }
+  immune = { -- pieces that don't get:
+    stun = { -- stunned
+      -- pawn = false,
+      -- knight = false,
+      -- bishop = false,
+      -- rook = false,
+      -- queen = false,
+      -- king = false,
+      -- boss = false,
+      -- canonball = false,
+      -- leader = false
+    },
+    frost = { -- delayed
+      -- same as above
+    },
+    burn = { -- burned
+      -- same as above
+    },
+    pierc = { -- damaged through iron armour
+      -- same as above
+    },
+    expl = { -- damaged by other pieces' explosion
+      -- same as above
+    },
+  }
   local dmg = nil
   if stack["expl_" .. p.type] then dmg = stack["expl_" .. p.type] end
   if stack.expl_7 then
