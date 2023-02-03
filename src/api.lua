@@ -270,7 +270,7 @@ do -- VERSION 2.4
               for ent3 in all(ents) do
                 grenade_tracking(ent3)
               end
-              if bullet_tracking() then
+              if bullet_tracking() and stack.special == "decree" then
                 local old_heroupd = hero.upd
                 local function temp_tracker()
                   bullet_tracking()
