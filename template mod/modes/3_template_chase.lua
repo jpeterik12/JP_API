@@ -52,7 +52,7 @@ weapons = {
 }
 
 -- JP_API CODE
-do -- VERSION 2.2
+do -- VERSION 2.3
   MODNAME = current_mod
 
   MODULES = {}
@@ -418,7 +418,7 @@ do -- VERSION 2.2
 
       function LISTENER:dr()
         if not LISTENER.run then return end
-        lprint("JP_API 2.2", 250, 162.5, 2)
+        lprint("JP_API 2.3", 250, 162.5, 2)
         lprint(MODNAME, 5, 162.5, 2)
         for listener in all(LISTENER.listeners["dr"]) do
           listener(self)
