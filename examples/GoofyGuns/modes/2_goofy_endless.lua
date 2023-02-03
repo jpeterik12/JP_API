@@ -177,6 +177,9 @@ do -- VERSION 2.2
 
         LISTENER.listeners["after_black"] = {}
         LISTENER.listeners["after_white"] = {}
+
+        LISTENER.listeners["floor_start"] = {}
+        LISTENER.listeners["floor_end"] = {}
       end
       local function card_fixing(ent)
         function fix_card(tfcard)
@@ -371,7 +374,7 @@ do -- VERSION 2.2
           card_fixing(ent)
         end
         for listener in all(LISTENER.listeners["upd"]) do
-          listener()
+          listener(self)
         end
         for special, func in pairs(LISTENER.specials) do
           if stack.special == special then
@@ -395,7 +398,7 @@ do -- VERSION 2.2
         lprint("JP_API 2.2", 250, 162.5, 2)
         lprint(MODNAME, 5, 162.5, 2)
         for listener in all(LISTENER.listeners["dr"]) do
-          listener()
+          listener(self)
         end
       end
 
@@ -468,6 +471,24 @@ do -- VERSION 2.2
             on_king_death()
           end
           for listener in all(LISTENER.listeners["king_death"]) do
+            listener()
+          end
+        end
+
+        mode.on_empty = function()
+          if on_empty then
+            on_empty()
+          end
+          for listener in all(LISTENER.listeners["floor_end"]) do
+            listener()
+          end
+        end
+
+        mode.next_floor = function()
+          if next_floor then
+            next_floor()
+          end
+          for listener in all(LISTENER.listeners["floor_start"]) do
             listener()
           end
         end
@@ -546,6 +567,14 @@ do -- VERSION 2.2
           if k == "on_new_turn" then
             setfenv(v, getfenv(1))
             add_listener("after_white", v)
+          end
+          if k == "on_empty" then
+            setfenv(v, getfenv(1))
+            add_listener("floor_end", v)
+          end
+          if k == "next_floor" then
+            setfenv(v, getfenv(1))
+            add_listener("floor_start", v)
           end
           if k:sub(1, 3) == "on_" and LISTENER.listeners[k:sub(4)] then
             setfenv(v, getfenv(1))
