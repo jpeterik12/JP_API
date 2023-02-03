@@ -1,4 +1,4 @@
-id = "sweep"
+id = "sweep" -- BY GLACIES
 function start()
   --[[
 		  Relavant Card Effects:
@@ -7,9 +7,7 @@ function start()
 		  					      When set to higher values: Sweep attack 2 more squares
 		  sweepdmg = <num>	Increases the sweep damage by <num>
 	  --]]
-  add_listener("dr", function()
-    lprint(lang.credits, 181, 158, 6)
-  end)
+
   add_listener("blade", function()
     if not stack.sweep or not stack.blade then return end
     local bladed_square = get_square_at(mx, my)

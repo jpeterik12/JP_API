@@ -1,8 +1,5 @@
-id = "aura"
+id = "aura" -- BY GLACIES
 function start()
-  add_listener("dr", function()
-    lprint(lang.credits, 181, 158, 6)
-  end)
   add_listener("after_white", function()
     --[[
 		    Relavant Card Effects:

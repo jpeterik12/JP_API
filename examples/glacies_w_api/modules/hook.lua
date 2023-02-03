@@ -1,4 +1,4 @@
-id = "hook"
+id = "hook" -- BY GLACIES
 function start()
   --[[
 		  Relavant Card Effects:
@@ -7,9 +7,6 @@ function start()
 	  	hookdmg = <num>				Increases damage of the hook by <num>
 	  	<piece>_hkim = 1			<piece> can't be pulled or stunned anymore
 	  --]]
-  add_listener("dr", function()
-    lprint(lang.credits, 181, 158, 6)
-  end)
   new_special("hook", function()
     local def_dmg = 1 -- default damage of the hook
     local immune = { -- pieces that don't get pulled or stunned
@@ -30,6 +27,16 @@ function start()
     local rope_colour = 5 -- colour of the rope
     local piece_tempo = 12 -- number of frames it takes for the piece to get pulled back
     local enable_sfx = true -- enables sfx for throwing the hook
+    local danger_warning = true -- enables folly shield warning when using the hook
+
+
+    if danger_warning and check_folly_shields(hero.sq) then
+      show_danger(hero.sq)
+      return
+    end
+    if stack.hookdmg then
+      def_dmg = stack.hookdmg + def_dmg
+    end
 
     local hook = mke()
     if enable_sfx then sfx("grab_done") end

@@ -1,4 +1,4 @@
-id = "sweep"
+id = "explosion"
 setup = {
   slots_max = { 10, 10 },
 }
@@ -28,11 +28,12 @@ ranks = {
   { all_hp = 1, ammo_max = 2 },
 }
 base = {
-  promotion = 1, surrender = 1, sweep = 1, blade = 10,
+  promotion = 1, surrender = 1, special = "grenade", grenades_max = 10, grenade_dmg = -2,
+  gren_bounceless = 1, gren_burn = 3, gren_stun = 1, gren_rats = 1, gren_frost = 2, gren_frag = 3,
   gain = { 3, 0, 0, 0, 1, 5, 2, 0 },
 
 }
-allow_modules = { "sweep" }
+allow_modules = { "explosion" }
 
 -- JP_API CODE
 do -- VERSION 2.3
@@ -767,13 +768,14 @@ do -- VERSION 2.3
 end
 -- JP_API CODE END
 
--- MOD CODE
 do
   function mod_setup()
     init_listeners()
+    add_listener("dr", function()
+      lprint(lang.credits, 181, 158, 6)
+    end)
   end
 end
--- MOD CODE END
 
 function start()
 

@@ -1,4 +1,4 @@
-id = "aura"
+id = "promotion"
 setup = {
   slots_max = { 10, 10 },
 }
@@ -28,11 +28,11 @@ ranks = {
   { all_hp = 1, ammo_max = 2 },
 }
 base = {
-  promotion = 1, surrender = 1, aura = 2,
+  promotion = 1, surrender = 1, promoting_1 = 5,
   gain = { 3, 0, 0, 0, 1, 5, 2, 0 },
 
 }
-allow_modules = { "aura" }
+allow_modules = { "periodic_promotion" }
 
 -- JP_API CODE
 do -- VERSION 2.3
@@ -767,14 +767,14 @@ do -- VERSION 2.3
 end
 -- JP_API CODE END
 
--- MOD CODE
 do
   function mod_setup()
     init_listeners()
+    add_listener("dr", function()
+      lprint(lang.credits, 181, 158, 6)
+    end)
   end
 end
--- MOD CODE END
-
 
 function start()
 
