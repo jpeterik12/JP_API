@@ -361,6 +361,26 @@ do -- VERSION 2.4
                 listener()
               end
             end
+            for b in all(bullets) do
+              if b.shot and not b.old_upd then
+                b.old_upd = b.upd
+                b.upd = function(self)
+                  for listener in all(LISTENER.listeners["bullet_upd"]) do
+                    listener(self)
+                  end
+                  self.old_upd(self)
+                end
+                for listener in all(LISTENER.listeners["bullet_init"]) do
+                  listener(b)
+                end
+                shot = true
+              end
+            end
+            if shot then
+              for listener in all(LISTENER.listeners["shot"]) do
+                listener()
+              end
+            end
           end
           special_tracker(ent)
         end
