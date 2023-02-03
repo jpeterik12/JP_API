@@ -58,7 +58,7 @@ do -- VERSION 2.4
   MODULES = {}
   foreach(ls("mods/" .. MODNAME .. "/modules/"), function(module_name)
     if module_name:sub(-4) ~= ".lua" then return end
-    module = table_from_file("mods/" .. MODNAME .. "/modules/" .. module_name:sub(1, -5))
+    local module = table_from_file("mods/" .. MODNAME .. "/modules/" .. module_name:sub(1, -5))
     if ban_modules and tbl_index(module.id, ban_modules) > 0 then return end
     if allow_modules and tbl_index(module.id, ban_modules) < 0 then return end
     add(MODULES, module)
@@ -607,26 +607,26 @@ do -- VERSION 2.4
         end
       end
 
+      local function_pairs = { on_new_turn = "after_white", on_empty = "floor_end", next_floor = "floor_start" }
+
       for module in all(MODULES) do -- Load important parts of modules
+        local env = getfenv(1)
+        local new_env = {}
+        setmetatable(new_env, { __index = function(t, k)
+          if module[k] ~= nil then return module[k] end
+          return env[k]
+        end })
         if module.start then
-          setfenv(module.start, getfenv(1))
+          setfenv(module.start, new_env)
           module.start()
         end
         for k, v in pairs(module) do
-          if k == "on_new_turn" then
-            setfenv(v, getfenv(1))
-            add_listener("after_white", v)
-          end
-          if k == "on_empty" then
-            setfenv(v, getfenv(1))
-            add_listener("floor_end", v)
-          end
-          if k == "next_floor" then
-            setfenv(v, getfenv(1))
-            add_listener("floor_start", v)
+          if function_pairs[k] then
+            setfenv(v, new_env)
+            add_listener(function_pairs[k], v)
           end
           if k:sub(1, 3) == "on_" and LISTENER.listeners[k:sub(4)] then
-            setfenv(v, getfenv(1))
+            setfenv(v, new_env)
             add_listener(k:sub(4), v)
           end
         end
@@ -690,7 +690,13 @@ do -- VERSION 2.4
 
     for module in all(MODULES) do -- LOAD MODULES
       if module.initialize then
-        setfenv(module.initialize, getfenv(1))
+        local env = getfenv(1)
+        local new_env = {}
+        setmetatable(new_env, { __index = function(t, k)
+          if module[k] ~= nil then return module[k] end
+          return env[k]
+        end })
+        setfenv(module.initialize, new_env)
         module.initialize()
       end
     end
