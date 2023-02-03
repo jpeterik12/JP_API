@@ -179,6 +179,31 @@ do -- VERSION 2.4
       end
 
       local function click_tracking(ent)
+        local function bullet_tracking()
+          local shot = false
+          for b in all(bullets) do
+            if b.shot and not b.old_upd then
+              b.old_upd = b.upd
+              b.upd = function(self)
+                for listener in all(LISTENER.listeners["bullet_upd"]) do
+                  listener(self)
+                end
+                self.old_upd(self)
+              end
+              for listener in all(LISTENER.listeners["bullet_init"]) do
+                listener(b)
+              end
+              shot = true
+            end
+          end
+          if shot then
+            for listener in all(LISTENER.listeners["shot"]) do
+              listener()
+            end
+          end
+          return shot
+        end
+
         local function grenade_tracking(ent) -- (Glacies)
           local function setup_bounce(grenade)
             if not grenade.twf then return end
@@ -245,6 +270,18 @@ do -- VERSION 2.4
               for ent3 in all(ents) do
                 grenade_tracking(ent3)
               end
+              if bullet_tracking() then
+                local old_heroupd = hero.upd
+                local function temp_tracker()
+                  bullet_tracking()
+                  old_heroupd()
+                  if chamber == 0 then
+                    hero.upd = old_heroupd
+                  end
+                end
+
+                hero.upd = temp_tracker
+              end
             end
           end
         end
@@ -259,27 +296,7 @@ do -- VERSION 2.4
                 listener()
               end
             end
-            local shot = false
-            for b in all(bullets) do
-              if b.shot and not b.old_upd then
-                b.old_upd = b.upd
-                b.upd = function(self)
-                  for listener in all(LISTENER.listeners["bullet_upd"]) do
-                    listener(self)
-                  end
-                  self.old_upd(self)
-                end
-                for listener in all(LISTENER.listeners["bullet_init"]) do
-                  listener(b)
-                end
-                shot = true
-              end
-            end
-            if shot then
-              for listener in all(LISTENER.listeners["shot"]) do
-                listener()
-              end
-            end
+            bullet_tracking()
           end
           special_tracker(ent)
         end
@@ -314,26 +331,7 @@ do -- VERSION 2.4
                 listener()
               end
             end
-            for b in all(bullets) do
-              if b.shot and not b.old_upd then
-                b.old_upd = b.upd
-                b.upd = function(self)
-                  for listener in all(LISTENER.listeners["bullet_upd"]) do
-                    listener(self)
-                  end
-                  self.old_upd(self)
-                end
-                for listener in all(LISTENER.listeners["bullet_init"]) do
-                  listener(b)
-                end
-                shot = true
-              end
-            end
-            if shot then
-              for listener in all(LISTENER.listeners["shot"]) do
-                listener()
-              end
-            end
+            bullet_tracking()
           end
           special_tracker(ent)
         end
