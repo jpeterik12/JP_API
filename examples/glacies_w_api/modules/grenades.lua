@@ -26,7 +26,57 @@ id = "grenades" -- BY GLACIES
 		<piece>_exim = 1					<piece> will not be damaged by other pieces' explosion
 	--]]
 
-local frag_min_range, frag_range_interval, frag_dmg, frag_pierce, burn_dmg, burn_stack, explode_range, immune, burn_gfx, start_gid, animation_length, piece_explosion_sfx, piece_explosion_delay
+
+-- SETTINGS
+burn_gfx = true -- enables gfx for burning squares
+start_gid = 352 -- the index of the 16*16 square for the first frame of animation
+animation_length = 64 -- number of frames in one cycle of animation
+piece_explosion_sfx = true -- enables sfx for piece death explosions
+piece_explosion_delay = 12 -- the delay between piece death and their explosions
+DEFAULT_frag_min_range = 3 -- default minimum range of fragments (unit: squares)
+DEFAULT_frag_range_interval = 2 -- default diff between min and max range (unit: squares)
+DEFAULT_frag_dmg = 1 -- default damage of each fragment
+DEFAULT_frag_pierce = 0 -- default pierce of each fragment
+DEFAULT_burn_dmg = 1 -- default damage of fire burning
+DEFAULT_burn_stack = 0 -- default Burning Stackablity State (BSS)
+-- When a burning square is ignited again, if BSS is:
+-- Positive: duration of burning stacks
+-- Else: duration of burning is set to the largest
+DEFAULT_explode_range = { -- the range of explosion when these pieces die
+  pawn = 1,
+  knight = 1,
+  bishop = 1,
+  rook = 1,
+  queen = 1,
+  king = 1,
+  boss = 1,
+  canonball = 1
+}
+immune = { -- pieces that don't get:
+  stun = { -- stunned
+    -- pawn = false,
+    -- knight = false,
+    -- bishop = false,
+    -- rook = false,
+    -- queen = false,
+    -- king = false,
+    -- boss = false,
+    -- canonball = false,
+    -- leader = false
+  },
+  frost = { -- delayed
+    -- same as above
+  },
+  burn = { -- burned
+    -- same as above
+  },
+  pierc = { -- damaged through iron armour
+    -- same as above
+  },
+  expl = { -- damaged by other pieces' explosion
+    -- same as above
+  },
+}
 
 function on_new_turn()
   for sq in all(squares) do
@@ -42,69 +92,68 @@ function on_new_turn()
   end
 end
 
+local function ignite(sq, dura)
+  burn_dmg = DEFAULT_burn_dmg
+  burn_stack = DEFAULT_burn_stack
+  if stack.burn_dmg then burn_dmg = burn_dmg + stack.burn_dmg end
+  if stack.burn_stack then burn_stack = burn_stack + stack.burn_stack end
+  if not sq.moat then
+    if sq.burn then
+      if burn_stack > 0 then
+        sq.burn = sq.burn + dura
+      else
+        sq.burn = max(sq.burn, dura)
+      end
+    else
+      sq.burn = dura
+    end
+    if burn_gfx and not sq.flame then
+      local function dr_burn()
+        local e = mke(0, sq.x, sq.y)
+        e.glacies = "fire drawer"
+        e.dp = 2 -- code by Glacies
+        e.life = animation_length
+        e.upd = function(self)
+          if sq.moat or hero.win then
+            sq.burn = nil
+            sq.flame = nil
+            del(ents, self)
+          end
+        end
+        e.dr = function(self)
+          spr(start_gid + animation_length - self.life, self.x, self.y)
+        end
+        sq.flame = e
+        e.nxt = dr_burn
+      end
+
+      dr_burn()
+    end
+  end
+end
+
 function start()
   -- display setup
-  burn_gfx = true -- enables gfx for burning squares
-  start_gid = 352 -- the index of the 16*16 square for the first frame of animation
-  animation_length = 64 -- number of frames in one cycle of animation
-  piece_explosion_sfx = true -- enables sfx for piece death explosions
-  piece_explosion_delay = 12 -- the delay between piece death and their explosions
+
 
   add_listener("grenade_init", function(ent)
     -- gameplay setup
-    frag_min_range = 3 -- default minimum range of fragments (unit: squares)
-    frag_range_interval = 2 -- default diff between min and max range (unit: squares)
-    frag_dmg = 1 -- default damage of each fragment
-    frag_pierce = 0 -- default pierce of each fragment
-    burn_dmg = 1 -- default damage of fire burning
-    burn_stack = 0 -- default Burning Stackablity State (BSS)
-    -- When a burning square is ignited again, if BSS is:
-    -- Positive: duration of burning stacks
-    -- Else: duration of burning is set to the largest
 
 
-    function ignite(sq, dura)
-      if not sq.moat then
-        if sq.burn then
-          if burn_stack > 0 then
-            sq.burn = sq.burn + dura
-          else
-            sq.burn = max(sq.burn, dura)
-          end
-        else
-          sq.burn = dura
-        end
-        if burn_gfx and not sq.flame then
-          local function dr_burn()
-            local e = mke(0, sq.x, sq.y)
-            e.glacies = "fire drawer"
-            e.dp = 2 -- code by Glacies
-            e.life = animation_length
-            e.upd = function(self)
-              if sq.moat or hero.win then
-                sq.burn = nil
-                sq.flame = nil
-                del(ents, self)
-              end
-            end
-            e.dr = function(self)
-              spr(start_gid + animation_length - self.life, self.x, self.y)
-            end
-            sq.flame = e
-            e.nxt = dr_burn
-          end
 
-          dr_burn()
-        end
-      end
-    end
+
+
+    frag_min_range = DEFAULT_frag_min_range
+    frag_range_interval = DEFAULT_frag_range_interval
+    frag_dmg = DEFAULT_frag_dmg
+    frag_pierce = DEFAULT_frag_pierce
+
 
     if stack.frag_range then frag_min_range = frag_min_range + stack.frag_range end
     if stack.frag_interval then frag_range_interval = frag_range_interval + stack.frag_interval end
     if stack.frag_dmg then frag_dmg = frag_dmg + stack.frag_dmg end
     if stack.frag_pierce then frag_pierce = frag_pierce + stack.frag_pierce end
-    if stack.burn_dmg then burn_dmg = burn_dmg + stack.burn_dmg end
-    if stack.burn_stack then burn_stack = burn_stack + stack.burn_stack end
+
 
     if stack.gren_bounceless and not ent.bounceless then
       ent.bounceless = true -- code by Glacies
@@ -117,7 +166,7 @@ function start()
       for i = 1, stack.gren_frag do
         local b = mk_bullet(ent.x, ent.y, rnd(1) - 0.5, 8)
         b.glacies = "fragment " .. i
-        b.life = irnd(frag_range_interval * 2 + 1) + 2 * frag_min_range
+        b.life = irnd(frag_range_interval * 2 + 1) + 2 * (frag_min_range)
         b.dmg = frag_dmg
         b.pierce = frag_pierce
       end
@@ -176,41 +225,6 @@ function start()
 end
 
 function on_bad_death(p)
-  explode_range = { -- the range of explosion when these pieces die
-    pawn = 1,
-    knight = 1,
-    bishop = 1,
-    rook = 1,
-    queen = 1,
-    king = 1,
-    boss = 1,
-    canonball = 1
-  }
-  immune = { -- pieces that don't get:
-    stun = { -- stunned
-      -- pawn = false,
-      -- knight = false,
-      -- bishop = false,
-      -- rook = false,
-      -- queen = false,
-      -- king = false,
-      -- boss = false,
-      -- canonball = false,
-      -- leader = false
-    },
-    frost = { -- delayed
-      -- same as above
-    },
-    burn = { -- burned
-      -- same as above
-    },
-    pierc = { -- damaged through iron armour
-      -- same as above
-    },
-    expl = { -- damaged by other pieces' explosion
-      -- same as above
-    },
-  }
   local dmg = nil
   if stack["expl_" .. p.type] then dmg = stack["expl_" .. p.type] end
   if stack.expl_7 then
@@ -222,7 +236,7 @@ function on_bad_death(p)
     else dmg = stack.expl_8 end
   end
   if dmg and get_square_at(p.x + 8, p.y + 8) then
-    local range = explode_range[p.name]
+    local range = DEFAULT_explode_range[p.name]
     if stack["expl_range_" .. p.type] then range = range + stack["expl_range_" .. p.type] end
     if stack.expl_range_7 then range = range + stack.expl_range_7 end
     if stack.expl_range_8 and p.leader then range = range + stack.expl_range_8 end
