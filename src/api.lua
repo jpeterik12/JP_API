@@ -1,5 +1,5 @@
 -- JP_API CODE
-do -- VERSION 2.5
+do -- VERSION 2.6
   MODNAME = current_mod
 
   MODULES = {}
@@ -383,7 +383,7 @@ do -- VERSION 2.5
 
       function LISTENER:dr()
         if not LISTENER.run then return end
-        lprint("JP_API 2.5", 250, 162.5, 2)
+        lprint("JP_API 2.6", 250, 162.5, 2)
         lprint(MODNAME, 5, 162.5, 2)
         for listener in all(LISTENER.listeners["dr"]) do
           listener(self)
@@ -635,7 +635,6 @@ do -- VERSION 2.5
             if module[k] ~= nil then return module[k] end
             return env[k]
           end })
-          _log(module.id .. ":" .. k)
           setfenv(value, new_env)
         end
       end
