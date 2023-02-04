@@ -46,7 +46,7 @@ base = {
 
 
 -- JP_API CODE
-do -- VERSION 2.4
+do -- VERSION 2.5
   MODNAME = current_mod
 
   MODULES = {}
@@ -430,7 +430,7 @@ do -- VERSION 2.4
 
       function LISTENER:dr()
         if not LISTENER.run then return end
-        lprint("JP_API 2.4", 250, 162.5, 2)
+        lprint("JP_API 2.5", 250, 162.5, 2)
         lprint(MODNAME, 5, 162.5, 2)
         for listener in all(LISTENER.listeners["dr"]) do
           listener(self)
@@ -604,23 +604,14 @@ do -- VERSION 2.4
       local function_pairs = { on_new_turn = "after_white", on_empty = "floor_end", next_floor = "floor_start" }
 
       for module in all(MODULES) do -- Load important parts of modules
-        local env = getfenv(1)
-        local new_env = {}
-        setmetatable(new_env, { __index = function(t, k)
-          if module[k] ~= nil then return module[k] end
-          return env[k]
-        end })
         if module.start then
-          setfenv(module.start, new_env)
           module.start()
         end
         for k, v in pairs(module) do
           if function_pairs[k] then
-            setfenv(v, new_env)
             add_listener(function_pairs[k], v)
           end
           if k:sub(1, 3) == "on_" and LISTENER.listeners[k:sub(4)] then
-            setfenv(v, new_env)
             add_listener(k:sub(4), v)
           end
         end
@@ -683,14 +674,19 @@ do -- VERSION 2.4
     end
 
     for module in all(MODULES) do -- LOAD MODULES
+      for k, value in pairs(module) do
+        if type(value) == "function" then
+          local env = getfenv(1)
+          local new_env = {}
+          setmetatable(new_env, { __index = function(t, k)
+            if module[k] ~= nil then return module[k] end
+            return env[k]
+          end })
+          _log(module.id .. ":" .. k)
+          setfenv(value, new_env)
+        end
+      end
       if module.initialize then
-        local env = getfenv(1)
-        local new_env = {}
-        setmetatable(new_env, { __index = function(t, k)
-          if module[k] ~= nil then return module[k] end
-          return env[k]
-        end })
-        setfenv(module.initialize, new_env)
         module.initialize()
       end
     end
