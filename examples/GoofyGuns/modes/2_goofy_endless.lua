@@ -29,7 +29,7 @@ base = {
 
 
 -- JP_API CODE
-do -- VERSION 2.6
+do -- VERSION 2.7
   MODNAME = current_mod
 
   MODULES = {}
@@ -408,12 +408,23 @@ do -- VERSION 2.6
           for listener in all(LISTENER.listeners["after_black"]) do
             listener()
           end
+          for sq in all(pentasquares) do -- CUSTOM OFF PENTA
+            if sq.penta and sq.penta_off then
+              sq.old_dr = sq.old_dr or sq.dr
+              function sq:dr(...)
+                sq.old_dr(self, unpack({ ... }))
+                if self.penta and self.penta_off then
+                  spr(16 * (14) + 12 + sq.cl, self.x, self.y)
+                end
+              end
+            end
+          end
         end
       end
 
       function LISTENER:dr()
         if not LISTENER.run then return end
-        lprint("JP_API 2.6", 250, 162.5, 2)
+        lprint("JP_API 2.7", 250, 162.5, 2)
         lprint(MODNAME, 5, 162.5, 2)
         for listener in all(LISTENER.listeners["dr"]) do
           listener(self)
