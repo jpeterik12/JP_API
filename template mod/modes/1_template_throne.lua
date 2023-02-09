@@ -65,7 +65,7 @@ do -- VERSION 2.7
 
   MODULES = {}
   foreach(ls("mods/" .. MODNAME .. "/modules/"), function(module_name)
-    if module_name:sub(-4) ~= ".lua" then return end
+    if module_name:sub( -4) ~= ".lua" then return end
     local module = table_from_file("mods/" .. MODNAME .. "/modules/" .. module_name:sub(1, -5))
     if ban_modules and tbl_index(module.id, ban_modules) > 0 then return end
     if allow_modules and tbl_index(module.id, ban_modules) < 0 then return end
@@ -100,7 +100,8 @@ do -- VERSION 2.7
           return "" .. data
         elseif data_type == type("") then
           return "\"" .. data .. "\""
-        elseif data_type == type(function() end) then
+        elseif data_type == type(function()
+            end) then
           return "function()"
         elseif data_type == type({}) then
           if depth == max_depth then
@@ -123,7 +124,7 @@ do -- VERSION 2.7
           if data_string == "{" then
             return "{}"
           end
-          if data_string:sub(-1) == "," then
+          if data_string:sub( -1) == "," then
             data_string = data_string:sub(1, -2)
           end
           data_string = data_string .. "\n" .. indent(depth - 1) .. "}"
@@ -404,14 +405,17 @@ do -- VERSION 2.7
           if not hero_square then return end
           if abs(ent_sq.px - hero_square.px) <= 1 and abs(ent_sq.py - hero_square.py) <= 1 then
             -- WITHIN 3x3
-            if not ent_sq.p then move_tracker(ent)
-            elseif stack.blade and ent_sq.p.hp <= stack.blade then blade_tracker(ent)
-            else shoot_tracker(ent) end
+            if not ent_sq.p then
+              move_tracker(ent)
+            elseif stack.blade and ent_sq.p.hp <= stack.blade then
+              blade_tracker(ent)
+            else
+              shoot_tracker(ent)
+            end
           else
             shoot_tracker(ent)
           end
         end
-
       end
 
       LISTENER.run = true
@@ -703,10 +707,15 @@ do -- VERSION 2.7
         if type(value) == "function" then
           local env = getfenv(1)
           local new_env = {}
-          setmetatable(new_env, { __index = function(t, k)
-            if module[k] ~= nil then return module[k] end
-            return env[k]
-          end })
+          setmetatable(new_env, {
+              __index = function(t, v)
+                return rawget(t, v) or module[v] or env[v]
+              end,
+              __newindex = function(t, key, val)
+                rawset(t, key, val)
+                rawset(module, key, val)
+              end
+          })
           setfenv(value, new_env)
         end
       end
@@ -751,7 +760,7 @@ do -- VERSION 2.7
       if weapons[mode.weapons_index + 1].desc then
         hinty = gety("weapons")
         x = mk_hint_but(283, hinty - 1, 5, 9, weapons[mode.weapons_index + 1].desc, { 4 }, 100, nil,
-          { x = 170, y = hinty + 5 })
+                { x = 170, y = hinty + 5 })
       else
         x = mke()
       end
@@ -776,7 +785,7 @@ do -- VERSION 2.7
       if ranks[mode.ranks_index + 1].desc then
         hinty = gety("ranks")
         x = mk_hint_but(279, hinty - 1, 5, 9, ranks[mode.ranks_index + 1].desc, { 4 }, 100, nil,
-          { x = 170, y = hinty + 5 })
+                { x = 170, y = hinty + 5 })
       else
         x = mke()
       end
