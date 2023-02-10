@@ -607,7 +607,6 @@ do -- VERSION 2.7
     end
 
     local function spawn_rank_description()
-      local x
       if rankhint then del(ents, rankhint) end
       if ranks[mode.ranks_index + 1].desc then
         local hinty = gety("ranks")
@@ -618,7 +617,7 @@ do -- VERSION 2.7
         rankhint = mke()
       end
       rankhint.lastindex = mode.ranks_index
-      function x:dr()
+      function rankhint:dr()
         local printy = gety("ranks") + 1
         if printy == -99 then del(ents, self) end
         if ranks[mode.ranks_index + 1].desc then lprint("?", 280, printy, 5) end
