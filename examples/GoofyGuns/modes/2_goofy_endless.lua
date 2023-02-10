@@ -580,18 +580,17 @@ do -- VERSION 2.7
       if gunhint then del(ents, gunhint) end
       if weapons[mode.weapons_index + 1].desc then
         hinty = gety("weapons")
-        x = mk_hint_but(
+        gunhint = mk_hint_but(
           283, hinty - 1, 5, 9, weapons[mode.weapons_index + 1].desc, {4}, 100, nil, {x = 170, y = hinty + 5}
         )
       else
-        x = mke()
+        gunhint = mke()
       end
-      x.lastindex = mode.weapons_index
-      function x:dr()
-        if weapons[mode.weapons_index + 1].desc then
-          local printy = gety("weapons") + 1
-          lprint("?", 284, printy, 5)
-        end
+      gunhint.lastindex = mode.weapons_index
+      function gunhint:dr()
+        local printy = gety("weapons") + 1
+        if printy == -99 then del(ents, self) end
+        if weapons[mode.weapons_index + 1].desc then lprint("?", 284, printy, 5) end
         if (mode.weapons_index ~= self.lastindex) then
           del(ents, self)
           spawn_gun_description()
@@ -601,19 +600,21 @@ do -- VERSION 2.7
     end
 
     local function spawn_rank_description()
+      local x
       if rankhint then del(ents, rankhint) end
       if ranks[mode.ranks_index + 1].desc then
-        hinty = gety("ranks")
-        x = mk_hint_but(279, hinty - 1, 5, 9, ranks[mode.ranks_index + 1].desc, {4}, 100, nil, {x = 170, y = hinty + 5})
+        local hinty = gety("ranks")
+        rankhint = mk_hint_but(
+          279, hinty - 1, 5, 9, ranks[mode.ranks_index + 1].desc, {4}, 100, nil, {x = 170, y = hinty + 5}
+        )
       else
-        x = mke()
+        rankhint = mke()
       end
-      x.lastindex = mode.ranks_index
+      rankhint.lastindex = mode.ranks_index
       function x:dr()
-        if ranks[mode.ranks_index + 1].desc then
-          local printy = gety("ranks") + 1
-          lprint("?", 280, printy, 5)
-        end
+        local printy = gety("ranks") + 1
+        if printy == -99 then del(ents, self) end
+        if ranks[mode.ranks_index + 1].desc then lprint("?", 280, printy, 5) end
         if (mode.ranks_index ~= self.lastindex) then
           del(ents, self)
           spawn_rank_description()
