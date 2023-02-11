@@ -438,8 +438,9 @@ do -- VERSION 2.7
       end
 
       do -- FIX EXHAUST (Glacies)
-        mode.grow = function()
-          grow()
+        local old_grow = grow
+        grow = function()
+          old_grow()
           local total_choices = 0
           for ent in all(ents) do if ent.cards then total_choices = total_choices + 1 end end
           for ent in all(ents) do
