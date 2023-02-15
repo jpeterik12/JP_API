@@ -7,6 +7,7 @@
     - [Gun Descriptions](#gun-and-rank-descriptions)
     - [Custom Gun Art](#custom-gun-art)
     - [Gun GID Fix](#gun-gid-fix)
+    - [`force` `ban` Fix](#force-ban-fix)
     - [Piece Limit Removal](#piece-limit-removal)
     - [`ban` on Weapons and Ranks](#ban-on-weapons-and-ranks)
     - [`ban_modules`](#ban_modules)
@@ -78,6 +79,11 @@ These are things JP_API that aren't part of the listener system, but are feature
 - As a side effect, it will prevent you from achieving "HOW IT SHOULD BE" or "SHE IS EVERYWHERE" achievements.
   - This also applies to any other mods or the base game, unless you restart the game.
 - Thanks to Glacies for finding out how to remove the limit!
+
+#### `force` `ban` fix
+
+- In vanilla, if you force a card, it will undo any bans on that card.
+- JP_API fixes this by making it so that if you force a card, it will be forced, but then banned afterwards.
 
 #### `allow_modules`
 
