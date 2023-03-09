@@ -110,7 +110,7 @@ The following functions are used for interacting with the listener system of JP_
 - Attaches `function` to the `event`. Any arguements are passed to `function`.
 - `event` must be a string.
 - `function` must be a function.
-- [List of `event`s](events)
+- [List of `event`s](events.md)
 
 &#8202;
 
@@ -120,7 +120,7 @@ The following functions are used for interacting with the listener system of JP_
 - Must be the same function that was passed to `add_listener`.
 - `event` must be a string.
 - `function` must be a function.
-- [List of `event`s](events)
+- [List of `event`s](events.md)
 
 &#8202;
 
