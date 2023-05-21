@@ -9,3 +9,434 @@
 
 credits::modder: JP_12
 
+-- MENU
+play::play
+options::options
+codex::codex
+credits::credits
+quit::quit
+back::back
+resign::resign
+start::start
+
+click_start::click to start
+best_floor::best floor:
+best_score::highscore:
+best_rank::best rank:
+completed::completed!
+avenged::avenged!
+exorcised::exorcised!
+best_time::best time
+throne_desc::throne mode|Reclaim your throne by reaching floor 12 of the castle's main tower
+endless_desc::endless mode|Climb a neverending dungeon and push back the white army as far as you can
+chase_desc::chase mode|Escape the black castle !|- Survive as long as you can|- Guards spawn constantly from borders|- Militia is active, Promotion is not|- Each dead King earns you a black card|- You can only keep 5 cards|- Grab ammo boxes to refill your shells
+endless_lock::Finish throne mode at any rank to unlock endless mode
+chase_lock::Reach floor 15 in endless to unlock chase mode
+
+credit_ben::code / gfx / sfx / gamedesign:
+credit_remy::sugar engine / narrative / shader:
+credit_penta::music:
+partners::patreon supporters
+translators::translators
+rank::rank
+codex_select::select a card|to display here
+codex_played::played
+codex_love::love
+codex_need_card::need card
+codex_comp::discovery
+codex_gather::While playing a game gather $0 to have a chance to make $1 spawn
+
+-- GAME MODE
+throne::throne
+endless::endless
+chase::chase
+
+-- INGAME
+floor_::floor:
+score_::score:
+poison::poison
+power::power
+range::range
+f_arc::f.arc
+knock::knock
+pierce::pierc
+blade::blade
+turn_::turn:
+dif_::dif:
+mode_::mode:
+unsafe_mode::unsafe_mode
+checkmate::checkmate
+try_again::try again?
+yes::yes
+no::no
+blood_bowl::Bowl of Blood|All white pieces gain +1hp
+pawns_join::two pawns join the white army
+piece_join::a $0 joins the white army
+click_to_use::Click to use it
+replenish_floor::Replenish on next floor
+folly_shield::Folly Shields|Protects you from your suicidal instincts|Refills on each turn
+soul_desc::$0's soul|Use it to move like a $0
+crow_turn::then play an extra turn
+soul_slot::a soul slot|Defeat a noble opponent to steal their soul
+already_loaded::Shotgun is already loaded!
+not_target_wrath::No valid target for Wrath!
+cant_move::You can't move!
+reload_shotgun_desc::Click to load $0 $1s in your shotgun
+shell::shell
+game_over::Game Over
+no_ammo_left::No ammo left
+no_shell_loaded::No shell loaded
+no_grenade_left::No grenade left
+scope_on::scope is already on
+card_exhausted::This card is exhausted. It will be refreshed $0
+card_exhausted_bc::This card is exhausted because $0
+refresh_when::when you reach next floor
+refresh_when_chase::when you get an ammo box
+heir::heir
+extra_turn::extra turn
+souls::souls
+degree_symbol::°
+hiding_heir::Hiding heir
+pawn_soul_desc::$0's soul|Use it to gain 2 firepower on your next shot
+unlocked::$0 unlocked!
+
+-- LEVEL_UP
+choose_set::Choose a set of cards
+
+-- EMOTES
+promote::promote
+knight_guard::guard
+black_bishop_warcry::justice!
+castle::castle
+backup::backup
+cover::cover
+
+-- CARDS NAME
+Ermine Belt::Ermine Belt
+Elite Gem::Elite Gem
+Extra Barrel::Extra Barrel
+Royal Loafers::Royal Loafers
+Majestic Censer::Majestic Censer
+Sacred Crown::Sacred Crown
+Blunderbuss::Blunderbuss
+Engraved Scope::Engraved Scope
+Holy Gunpowder::Holy Gunpowder
+Ritual Dagger::Ritual Dagger
+August Presence::August Presence
+Crow's Blessing::Crow's Blessing
+The Moat::The Moat
+Rightful Curtsy::Rightful Curtsy
+Wand of Downpour::Wand of Downpour
+Wand of Frenzy::Wand of Frenzy
+Wand of Wrath::Wand of Wrath
+Wand of Wings::Wand of Wings
+Wand of Gust::Wand of Gust
+Wand of Hypnosis::Wand of Hypnosis
+Kingdom Wealth::Kingdom Wealth
+Gradual Absolution::Gradual Absolution
+Taunting Hop::Taunting Hop
+Unfaithful Steed::Unfaithful Steed
+Unjust Decree::Unjust Decree
+Kingly Alms::Kingly Alms
+Subtle Poison::Subtle Poison
+Small Fry Harvest::Small Fry Harvest
+A Piercing Truth::A Piercing Truth
+Black Mist::Black Mist
+King's Shoulders::King's Shoulders
+High Focus::High Focus
+Courteous Jousting::Courteous Jousting
+Cornered Despot::Cornered Despot
+Sawed-off Justice::Sawed-off Justice
+Welcome Gift::Welcome Gift
+Cannon Fodder::Cannon Fodder
+Possessed::Possessed
+Philanthropy::Philanthropy
+Imperial Shot Put::Imperial Shot Put
+Egotic Maelstrom::Egotic Maelstrom
+Church Organ::Church Organ
+Cathedral::Cathedral
+Black Plague::Black Plague
+Ravenous Rats::Ravenous Rats
+Deep Water::Deep Waters
+Unholy Call::Unholy Call
+Undercover Mission::Undercover Mission
+Caltrops::Caltrops
+Nightbane::Nightbane
+Bushido::Bushido
+Bloodless Coups::Bloodless Coup
+Wand of Hypnosis::Wand of Hypnosis
+Presbyopia::Presbyopia
+Golden Aging::Golden Aging
+Fool Companion::Fool Companion
+Force-feeding::Force-Feeding
+
+Backups::Backups
+Cavalry::Cavalry
+Conclave::Conclave
+Entitle::Entitle
+Cardinal::Cardinal
+Remparts::Remparts
+Pillage::Pillage
+Crusades::Crusades
+Peace::Peace
+King's Mistress::King's Mistress
+Revolution::Revolution
+Bodyguard::Bodyguard
+Ruins::Ruins
+Assault::Assault
+Kite Shield::Kite Shield
+Zealots::Zealots
+Militia::Militia
+Ammunition Depot::Ammunition Depot
+Scouting::Scouting
+Pikemen::Pikemen
+Ascension::Ascension
+Castle::Castle
+Conscription::Conscription
+Theocracy::Theocracy
+Iron Maiden::Iron Maiden
+Court of the King::Court of the King
+The Red Book::The Red Book
+Homecoming::Homecoming
+Overthrown Theocracy::Overthrown Theocracy
+Saboteur::Saboteur
+Lookout Tower::Lookout Tower
+Throne Room::Throne Room
+The Secret Heir::The Secret Heir
+Genderqueer::Genderqueer
+Karma::Karma
+Undead Armies::Undead Armies
+Shortage::Shortage
+Succubus::Succubus
+Bunker::Bunker
+Sanctity::Sanctity
+Knightmare::Knightmare
+Highest Dungeon::Highest Dungeon
+Cathedral::Cathedral
+The Bridge::The Bridge
+Divine Healing::Divine Healing
+Last Guardian::Last Guardian
+Trowel::Trowel
+Full Plate Armor::Full Plate Armor
+Military Academy::Military Academy
+Witch's Curse::Witch's Curse
+Saddle::Saddle
+The Jester::The Jester
+Guillotine::Guillotine
+Analysis Paralysis::Analysis Paralysis
+
+
+
+
+-- CARDS DYNAMIC
+rem_piece::Remove $0 $1s
+add_piece::Add $0 $1s $delay
+at_delay::after $0 turns
+ammo_max::ammo max
+grenades_max::grenade(s)
+ammo_regen::ammo regeneration
+firepower::firepower
+firerange::fire range
+spread::spread
+knockback::knockback
+hp::hp
+queen_escape::You can't escape her...
+queen_everywhere::...She's everywhere!
+flip_if::Flip card if $0
+every_x_turn::every $0 turns
+white::white
+black::black
+and::and
+standing::$1 on $0 squares
+
+effect_chamber_max::Charge $0 additional shell(s) in your shotgun
+effect_soul_slot::Add $0 Extra soul slot(s)
+effect_soul_sink::Remove 1 soul slot
+effect_crown::You can play an extra turn after using a soul card move
+effect_presence::Non-King pieces can't come near your King
+effect_moat::Non-Knight pieces can't cross the moat in one move
+effect_hp::$0: $2 hp
+effect_hprc::$0: $1% hp
+effect_tempo::$0: $2 speed
+effect_shell::Gain $1 ammo each time you kill a $0
+effect_poison::$0's moves limit: 1 square for $1 turns
+effect_cage::$0's moves are limited to $1 square(s)
+effect_shield::$0s have a shield that absorb every damage on a single turn
+effect_flying::$0s can move and attack across any obstacles
+effect_castle::$leader swaps position with a $0 whenever he would take damage
+effect_iron::$0s can't die
+effect_orth::$0s can move (not attack) orthogonally
+effect_joust::Play an extra turn when you kill a $0
+effect_recoil::Shooting moves you backwards
+effect_firepower::$1 firepower
+effect_firerange::$1 fire range
+effect_rep::replace $0 with a $1 after they die
+effect_pawnreap::Use pawn's souls to gain +2 firepower on your next shot
+effect_freegren::Once per turn throw a grenade without ending your turn
+effect_grenade_dmg::$1 grenade damage
+effect_sanctity::$0's souls can't be reaped
+effect_cannonball::add $0 cannonball(s) to the chessboard. Cannonballs can be grabbed and thrown at pieces.
+effect_plague::at the end of each turn a random piece takes 1 dmg
+effect_rats::When you kill a piece, a rat bites the nearest target for 1 dmg
+effect_deepwater::Non-Knight pieces within the moat can't attack you
+effect_pentagrams::Add $0 pentagrams on the board.Trigger one to get an extra turn.Trigger all to get +2 firepower.
+effect_waypoint::When you reach the waypoint choose a disruption effect and play an extra turn
+effect_caltrops::Injured pieces lose 2 speed
+effect_blade::Blade:$1
+effect_blade_old::Execute close range pieces with hp equal or inferior to your blade
+effect_bushido::Once per turn, Execute a piece with your blade without ending your turn.
+effect_peace::$0 can't attack you
+effect_minr::$0 can't attack you at less than $1 range 
+effect_carry::$0 carry non-rook and non-knight pieces when moving
+effect_jester_guard::Jesters can move in all directions and always follow $leader. Earn an extra turn when you kill a jester
+effect_overload::Reloading without moving lets you squeeze one more shell in the shotgun when it's full
+effect_delay_mult::Slows down White and Black backup cards by $0%
+
+effect_bodyguard::$leader can't be killed if a $0 is alive
+effect_knockback::+$0% chance to knockback enemy
+effect_spread::fire arc $1$
+effect_absolution::$1 Firepower for each empty soul slot
+effect_hop::Once per turn, you can jump over a nearby piece for $0 dmg without ending the turn
+effect_steed::move range:+1
+effect_pierce::Your bullets have $0% chance to pierce through targets
+effect_mist::Protects from death once per floor
+effect_grab::Once per floor, drag a nearby piece on your king and throw it in any direction
+effect_assault::Pawns can walk 2 squares on their first move
+effect_militia::Pawns can move / attack in four directions
+effect_pikemen::Pawns can't attack diagonally but they can attack the front two squares instead
+effect_theocracy::Win if all bishops are dead
+effect_bad_shells::Doubles fire arc for $0 bullet(s)
+effect_alarm::White Backups come $0 turn(s) sooner for every piece you kill
+effect_heir::The secret heir replaces the king if he dies
+effect_nothing::No modifiers
+effect_wraith::$0 can only be hit when moving
+effect_manual_reload::Reload only one shell per turn
+effect_protect::non-$0 pieces near a $0 can't take more than one damage per turn
+effect_bridge::open a path in the moat
+effect_healer::$0s can heal nearby allies instead of moving
+effect_lastg::After killing a $0, promote another $0 if it's the last one 
+effect_curse::Flip this card if a $0 is killed
+effect_jester::Jesters can move diagonally and have +2 speed. Jesters pass the hat when he dies.
+effect_paralysis::You can't play for $0 turns or until you are in check
+effect_free_souls::Add $0 random soul(s) at the start of each floor
+
+
+-- STATS
+stat_firepower::Each shell in your shotgun sends $0 projectile(s). Each of them deals one damage.
+stat_range::your bullets range is $0 squares
+stat_f_arc::your bullets spread over $0 
+stat_knock::Your bullets have $0% chance to repel pieces
+stat_pierce::Your bullets have $0% chance to pierce pieces
+stat_blade::Kill nearby piece with $0 life or less without spending any shell
+
+-- CONDITIONS
+cond_contact::a piece is adjacent to you
+cond_inner::your king is not on the board's edge
+cond_first-reload::your shotgun has been reloaded
+cond_no_piece::There's no $0 on the board
+
+-- SPECIALS
+special_strafe::Strafe mode: Right click a target and fire on your next move
+special_scope::Right click: arc -45$ and range +1. Resets on each move or reload
+special_decree::King is allowed to right click to fire all loaded shells
+special_grenade::Right click to throw a grenade
+
+-- WANDS
+wand_0::Deal $0 damage on random enemies
+wand_1::Refill your ammo and reload your gun
+wand_2::Deal $0 damage to a non-King target
+wand_3::Move up to $0 squares in any directions
+wand_4::Repel all white pieces northward
+wand_5::Play a white piece of your choice
+
+-- DISRUPTION
+disrupt_effect_name_0::Sabotage white army
+disrupt_effect_name_1::Poison their water
+disrupt_effect_name_2::Steal their ammo
+disrupt_effect_name_3::Stab the white king
+disrupt_effect_desc_0::Deactivate a white card of your choice
+disrupt_effect_desc_1::-1 hp max to all white pieces
+disrupt_effect_desc_2::Refill your ammo and reload your gun
+disrupt_effect_desc_3::Hit $leader for 3 hp
+
+-- SHOTGUN UNLOCK
+shotgun_unlock_1::Get 6+ firerange|to unlock this shotgun
+shotgun_unlock_2::Get 100% knockback chance|to unlock this shotgun
+shotgun_unlock_3::Get 4+ shotgun shell capacity|to unlock this shotgun 
+shotgun_unlock_4::Get 4+ blade|to unlock this shotgun
+
+
+-- OPTIONS
+music::music
+sfx::sfx
+fullscren::fullscreen
+crt::crt
+speedrun::speedrun
+shields::shields
+scr.shake::scr.shake
+scr.flash::scr.flash
+lang::lang
+on::on
+off::off
+mod::mod
+none::none
+
+-- PIECES
+piece_0::pawn
+piece_1::knight
+piece_2::bishop
+piece_3::rook
+piece_4::queen
+piece_5::king
+piece_6::boss
+piece_7::all pieces
+piece_8::$leader
+
+-- SHORT PIECE ( length must be <=6 )
+short_piece_0::pawn
+short_piece_1::knight
+short_piece_2::bishop
+short_piece_3::rook
+short_piece_4::queen
+short_piece_5::king
+short_piece_6::boss
+
+-- DIFFICULTY
+Easy::Easy
+Normal::Normal
+Hard::Hard
+Very Hard::Very Hard
+King::King
+
+-- INTRO
+vig_1::The Black King had been an extravagant and unpleasant ruler. As the years went by, more and more of his subjects were won over by the White King who offered higher wages and genuinely decent work. And then they took his castle. His knights resigned from his service. Even his wife the Queen abandoned him.
+vig_2::Before leaving, the last black bishop came to the Black King and told him "Thou hast been a bad king, yet thyne reign is still holy. Thou shalt retain a claim over thyne former subjects' souls, and we may yet have cause to fear thyne wrath. Thus heed my warning. The wrath of a man, as godly as might Thee be, is ever his undoing."
+vig_3::But the Black King was abandoned by all, with not a rook left to his name. All he had left was his prized royal shotgun, the shreds of his dignity, and the growing fires of the prophesized wrath. Ever my undoing was it? Undone!! Just what more exactly could I lose?!? In his dark folly, the king loaded the shotgun and went to meet his final checkmate.
+
+-- TRANSITION 4 or 5
+vig_4::So many years' worth of new subjects... So much work to make them feel welcome and safe... All reduced to glass shards by one royal fucker with a shotgun. The White King would not indulge this, not one more floor. Quite literally bursting with rage, he loomed out to crush this egotistical maniac.
+vig_5::So many years' worth of new subjects... So much work to make them feel welcome and safe... All reduced to glass shards by one royal fucker with a shotgun. The White King would not, could not stay aside and let the Conclave lead his kingdom to sheer ruin. Quite literally bursting with rage, the White King loomed out to crush this egotistical maniac.
+
+-- ENDING 6-7
+vig_6::And so it was that the wrath of the Black King finally carried him to victory. His turn to steal the White King's castles and subjects! They would have to endure his terrible rule once again...
+vig_7::"Cheer up!" he would tell them, "at least thou didn't get blown to pieces!" as he upheld his shotgun and laughed. Undefeated, he had learned nothing. It wouldn't be too long before a new White King rises up and the whole story starts anew.
+
+-- SECRET ENDING 8,9,10,11,12
+vig_8::"Hah! Who's undone now!!" the Shotgun King yelled. But just as the Bishop died, the book left his hands and lifted off the board and into the sky's safe haven...
+vig_9::"Not so fast." With his shotgun already loaded, the King took aim...
+vig_10::... and blasted the book, turning it into a mass of fluttering, torn pages. "Holy words my ass!" he said, "None is holier than myself and this here shotgun!!"
+vig_11::"Cheer up!" he would tell them, "at least thou didn't get blown to pieces!" as he upheld his shotgun and laughed. Undefeated, he had learned nothing. It wouldn't be too long before a new White King rises up and the whole story starts anew.
+vig_12::"Cheer up! At least thou didn't get blown to pieces!" he said upholding the shotgun and laughed his most evil laugh. "And now, a new edict! No more books for you all!! Forbidden! Out with the holy books! From now on, I'm your God. The Shotgun God!!" His rule would be pitiless and feared by all forevermore.
+
+-- PLURALS
+child:s:children
+man:s:men
+*:s:s
+
+-- eg:s:egs
+-- eg:2:eggs
+-- eg:3:eggs
+-- -> 1 eg
+-- -> 2 eggs
+-- -> 3 eggs
+-- -> 4 egs
