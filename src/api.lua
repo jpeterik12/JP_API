@@ -5,7 +5,6 @@ do -- VERSION 2.9
   MODULES = {}
   foreach(
     ls("mods/" .. MODNAME .. "/modules/"), function(module_name)
-      if module_name:sub(-4) ~= ".lua" then
         return
       end
       local module = table_from_file("mods/" .. MODNAME .. "/modules/" .. module_name:sub(1, -5))
@@ -627,6 +626,7 @@ do -- VERSION 2.9
     end
 
     function add_listener(event, listener)
+      init_listeners()
       if not LISTENER.listeners[event] then
         LISTENER.listeners[event] = {}
       end
