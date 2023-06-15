@@ -627,6 +627,7 @@ do -- VERSION 2.9
     end
 
     function add_listener(event, listener)
+      init_listeners()
       if not LISTENER.listeners[event] then
         LISTENER.listeners[event] = {}
       end
